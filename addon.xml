@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.netflix"
+       name="Netflix"
+	   version="0.1"
+	   provider-name="zero">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.requests" version="2.8.1"/>
+        <import addon="script.module.six" version="1.7.3"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Netflix plugin</summary>
+        <summary lang="de">Netflix plugin</summary>
+        <description lang="en">Plugin to watch netflix with Kodi.</description>
+        <description lang="de">Plugin um Netflix mit Kodi anzusehen.</description>
+        <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+        <disclaimer lang="de">Einige Teile dieses Addons sind möglicherweise in Ihrem Land nicht legal - bitte prüfen Sie Ihre lokal gültigen Gesetze vor der Installation.</disclaimer>
+        <language>en de</language>
+        <platform>all</platform>
+	    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <forum>http://forum.xbmc.org/showthread.php?tid=166099</forum>
+	    <website/>
+	    <email/>
+	    <source/>
+    </extension>
+</addon>

@@ -1,0 +1,205 @@
+﻿# Kodi Media Center language file
+# Addon Name: Netflix
+# Addon id: plugin.video.netflix
+# Addon Provider: zero
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2015-11-04 18:30+0100\n"
+"PO-Revision-Date: 2015-11-04 18:30+0100\n"
+"Last-Translator: zero\n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#30001"
+msgid "Username"
+msgstr "Benutzername"
+
+msgctxt "#30002"
+msgid "Password"
+msgstr "Passwort"
+
+msgctxt "#30003"
+msgid "Profil settings"
+msgstr "Profil Einstellungen"
+
+msgctxt "#30004"
+msgid "Single-user account"
+msgstr "Einzel-Profil Konto"
+
+msgctxt "#30005"
+msgid "Show profile selection on each start"
+msgstr "Profilauswahl bei jedem Start anzeigen"
+
+msgctxt "#30010"
+msgid "Advanced"
+msgstr "Erweitert"
+
+msgctxt "#30011"
+msgid "Debug Logging"
+msgstr "Debug Protokollierung"
+
+msgctxt "#30012"
+msgid "SSL settings"
+msgstr "SSL Einstellungen"
+
+msgctxt "#30013"
+msgid "Use advanced SSL"
+msgstr "Benutze erweitertes SSL"
+
+msgctxt "#30014"
+msgid "SSL version"
+msgstr "SSL Version"
+
+msgctxt "#30020"
+msgid "Views"
+msgstr "Ansichten"
+
+msgctxt "#30021"
+msgid "Get covers & fanart images from TMDb"
+msgstr "Cover & Fanart über TMDb beziehen"
+
+msgctxt "#30022"
+msgid "Browse TV-Shows instead of autoplaying"
+msgstr "Serien durchsuchen anstatt automatischer Wiedergabe"
+
+msgctxt "#30023"
+msgid "Appearance"
+msgstr "Aussehen"
+
+msgctxt "#30024"
+msgid "Force view"
+msgstr "View erzwingen"
+
+msgctxt "#30025"
+msgid "View ID - videos"
+msgstr "View ID - Videos"
+
+msgctxt "#30026"
+msgid "View ID - episodes"
+msgstr "View ID - Episoden"
+
+msgctxt "#30027"
+msgid "View ID - viewing activity)"
+msgstr "View ID = Kürzlich angesehen"
+
+msgctxt "#30100"
+msgid "Movies"
+msgstr "Filme"
+
+msgctxt "#30101"
+msgid "TV shows"
+msgstr "Serien"
+
+msgctxt "#30102"
+msgid "Suggestions"
+msgstr "Empfehlungen"
+
+msgctxt "#30103"
+msgid "Who's watching?"
+msgstr "Wer schaut gerade?"
+
+msgctxt "#30104"
+msgid "My list"
+msgstr "Meine Liste"
+
+msgctxt "#30105"
+msgid "Viewing activity"
+msgstr "Kürzlich angesehen"
+
+msgctxt "#30106"
+msgid "Latest"
+msgstr "Neuerscheinungen"
+
+msgctxt "#30107"
+msgid "All shows"
+msgstr "Alle Serien"
+
+msgctxt "#30108"
+msgid "Genres"
+msgstr "Genres"
+
+msgctxt "#30109"
+msgid "Search"
+msgstr "Suche"
+
+msgctxt "#30150"
+msgid "Add to library"
+msgstr "Zur Bibliothek hinzufügen"
+
+msgctxt "#30151"
+msgid "Continue watching"
+msgstr "Wiedergabe fortsetzen"
+
+msgctxt "#30152"
+msgid "Show seasons"
+msgstr "Staffeln anzeigen"
+
+msgctxt "#30153"
+msgid "Play trailer"
+msgstr "Trailer abspielen"
+
+msgctxt "#30154"
+msgid "Add to my list"
+msgstr "Zu meiner Liste hinzufügen"
+
+msgctxt "#30155"
+msgid "Similar Movies"
+msgstr "Ähnliche Filme"
+
+msgctxt "#30156"
+msgid "Similar TV Shows"
+msgstr "Ähnliche Serien"
+
+msgctxt "#30200"
+msgid "Connecting Netflix"
+msgstr "Mit Netflix verbinden"
+
+msgctxt "#30201"
+msgid "Preparing login"
+msgstr "Login vorbereiten"
+
+msgctxt "#30202"
+msgid "Sending login details"
+msgstr "Sende Login Daten"
+
+msgctxt "#30203"
+msgid "Loading profile"
+msgstr "Lade Profile"
+
+msgctxt "#30204"
+msgid "Complete"
+msgstr "Fertig"
+
+msgctxt "#30205"
+msgid "Loading metadata"
+msgstr "Lade Metadaten"
+
+msgctxt "#30300"
+msgid "Sorry! Netflix is not available in your country yet."
+msgstr "Entschuldigung! Netflix ist aktuell nicht verfügbar in Ihrem Land."
+
+msgctxt "#30301"
+msgid "Cookies have been deleted"
+msgstr "Die Cookies wurden gelöscht"
+
+msgctxt "#30302"
+msgid "Session has been deleted."
+msgstr "Die Session wurden gelöscht"
+
+msgctxt "#30303"
+msgid "You are not logged in. Check your credentials and/or restart the addon!"
+msgstr "Sie sind nicht eingeloggt. Prüfen Sie Ihren Zugang und/oder starten Sie das Addon neu!"
+
+msgctxt "#30304"
+msgid "Multiple profiles found. Choose your profile!"
+msgstr "Verschiedene Profile gefunden. Wählen Sie Ihr Profil!"

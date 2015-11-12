@@ -1,0 +1,209 @@
+﻿# Kodi Media Center language file
+# Addon Name: Netflix
+# Addon id: plugin.video.netflix
+# Addon Provider: zero
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2015-11-04 18:30+0100\n"
+"PO-Revision-Date: 2015-11-04 18:30+0100\n"
+"Last-Translator: zero\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Profil settings"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Single-user account"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Show profile selection on each start"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Debug logging"
+msgstr ""
+
+msgctxt "#30012"
+msgid "SSL settings"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Use advanced SSL"
+msgstr ""
+
+msgctxt "#30014"
+msgid "SSL version"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Views"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Get covers & fanart images from TMDb"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Browse TV-Shows instead of autoplaying"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Appearance"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Force view"
+msgstr ""
+
+msgctxt "#30025"
+msgid "View ID - videos"
+msgstr ""
+
+msgctxt "#30026"
+msgid "View ID - episodes"
+msgstr ""
+
+msgctxt "#30027"
+msgid "View ID - viewing activity)"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30101"
+msgid "TV shows"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Suggestions"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Who's watching?"
+msgstr ""
+
+msgctxt "#30104"
+msgid "My list"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Viewing activity"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Latest"
+msgstr ""
+
+msgctxt "#30107"
+msgid "All shows"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Genres"
+msgstr ""
+
+msgctxt "#30109"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Next page"
+msgstr ""
+
+msgctxt "#30150"
+msgid "Add to library"
+msgstr ""
+
+msgctxt "#30151"
+msgid "Continue watching"
+msgstr ""
+
+msgctxt "#30152"
+msgid "Show seasons"
+msgstr ""
+
+msgctxt "#30153"
+msgid "Play trailer"
+msgstr ""
+
+msgctxt "#30154"
+msgid "Add to my list"
+msgstr ""
+
+msgctxt "#30155"
+msgid "Similar Movies"
+msgstr ""
+
+msgctxt "#30156"
+msgid "Similar TV Shows"
+msgstr ""
+
+msgctxt "#30200"
+msgid "Connecting Netflix"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Preparing login"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Sending login details"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Loading profile"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Complete"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Loading metadata"
+msgstr ""
+
+msgctxt "#30300"
+msgid "Sorry! Netflix is not available in your country yet."
+msgstr ""
+
+msgctxt "#30301"
+msgid "Cookies have been deleted."
+msgstr ""
+
+msgctxt "#30302"
+msgid "Session has been deleted."
+msgstr ""
+
+msgctxt "#30303"
+msgid "You are not logged in. Check your credentials and/or restart the addon!"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Multiple profiles found. Choose your profile!"
+msgstr ""
