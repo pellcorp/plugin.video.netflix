@@ -6,20 +6,28 @@ import helper
 import re
 import urllib
 import xbmc
+import xbmcaddon
 import xbmcvfs
 
+addon_handle = xbmcaddon.Addon()
+addon_id = addon_handle.getAddonInfo('id')
+addon_user_data_folder = xbmc.translatePath('special://profile/addon_data/' + addon_id + '/')
+cache_folder = xbmc.translatePath(addon_user_data_folder + 'cache/')
+cache_folder_cover_tmdb = xbmc.translatePath(cache_folder + 'covers/')
+cache_folder_fanart_tmdb = xbmc.translatePath(cache_folder + 'fanart/')
 api_key = base64.b64decode('NDc2N2I0YjJiYjk0YjEwNGZhNTUxNWM1ZmY0ZTFmZWM=')
+main_url = 'http://www.netflix.com'
 
 
 def get_video_info(video_id):
     content = ''
-    cache_file = xbmc.translatePath(helper.cache_folder + '/' + video_id + '.cache')
+    cache_file = xbmc.translatePath(cache_folder + video_id + '.cache')
     if xbmcvfs.exists(cache_file):
         file_handler = xbmcvfs.File(cache_file, 'r')
         content = file_handler.read()
         file_handler.close()
     if not content:
-        content = connection.load_site(helper.main_url + '/JSON/BOB?movieid=' + video_id)
+        content = connection.load_site(main_url + '/JSON/BOB?movieid=' + video_id)
         file_handler = xbmcvfs.File(cache_file, 'w')
         file_handler.write(content)
         file_handler.close()
@@ -29,9 +37,9 @@ def get_video_info(video_id):
 def download(video_type, video_id, title, year):
     filename = (''.join(c for c in unicode(video_id, 'utf-8') if c not in '/\\:?"*|<>')).strip() + '.jpg'
     filename_none = (''.join(c for c in unicode(video_id, 'utf-8') if c not in '/\\:?"*|<>')).strip() + '.none'
-    cover_file = xbmc.translatePath(helper.cache_folder_cover_tmdb + filename)
-    cover_file_none = xbmc.translatePath(helper.cache_folder_cover_tmdb + filename_none)
-    fanart_file = xbmc.translatePath(helper.cache_folder_fanart_tmdb + filename)
+    cover_file = xbmc.translatePath(cache_folder_cover_tmdb + filename)
+    cover_file_none = xbmc.translatePath(cache_folder_cover_tmdb + filename_none)
+    fanart_file = xbmc.translatePath(cache_folder_fanart_tmdb + filename)
     if video_type == 'tv':
         content = connection.load_site(
             'http://api.themoviedb.org/3/search/' + video_type + '?api_key=' + api_key + '&query='
