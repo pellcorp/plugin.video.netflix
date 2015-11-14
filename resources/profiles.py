@@ -1,63 +1,56 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import connection
-import helper
 import re
+import utility
 import xbmc
-import xbmcaddon
 import xbmcgui
 
-addon_handle = xbmcaddon.Addon()
-show_profiles = addon_handle.getSetting('show_profiles') == 'true'
-main_url = 'http://www.netflix.com'
-profile_switch_url = 'https://api-global.netflix.com/desktop/account/profiles/switch?switchProfileGuid='
-profile_url = 'https://www.netflix.com/ProfilesGate?nextpage=http%3A%2F%2Fwww.netflix.com%2FDefault'
+show_profiles = utility.get_setting('show_profiles') == 'true'
 
 
 def load_profile():
-    selected_profile = addon_handle.getSetting('selected_profile')
-    if selected_profile:
-        connection.load_site(profile_switch_url + selected_profile)
+    if utility.get_setting('selected_profile'):
+        connection.load_site(utility.profile_switch_url + utility.get_setting('selected_profile'))
         connection.save_session()
     else:
-        helper.debug('Load profile: no stored profile found!', 'Error')
+        utility.log('Load profile: no stored profile found!', loglevel = xbmc.LOGERROR)
     get_my_list_change_authorisation()
 
 
 def choose_profile():
     profiles = []
-    content = connection.load_site(profile_url)
+    content = connection.load_site(utility.profile_url)
     match = re.compile('"experience":"(.+?)".+?guid":"(.+?)".+?profileName":"(.+?)"', re.DOTALL).findall(content)
     for is_kid, token, name in match:
-        profile = {'name': helper.unescape(name), 'token': token, 'is_kid': is_kid == 'jfk'}
+        profile = {'name': utility.unescape(name), 'token': token, 'is_kid': is_kid == 'jfk'}
         profiles.append(profile)
     if len(match) > 0:
         dialog = xbmcgui.Dialog()
-        nr = dialog.select(helper.translate_string(30103), [profile['name'] for profile in profiles])
+        nr = dialog.select(utility.get_string(30103), [profile['name'] for profile in profiles])
         if nr >= 0:
             selected_profile = profiles[nr]
         else:
             selected_profile = profiles[0]
-        connection.load_site(profile_switch_url + selected_profile['token'])
-        addon_handle.setSetting('selected_profile', selected_profile['token'])
-        addon_handle.setSetting('is_kid', 'true' if selected_profile['is_kid'] else 'false')
-        addon_handle.setSetting('profile_name', selected_profile['name'])
+        connection.load_site(utility.profile_switch_url + selected_profile['token'])
+        utility.set_setting('selected_profile', selected_profile['token'])
+        utility.set_setting('is_kid', 'true' if selected_profile['is_kid'] else 'false')
+        utility.set_setting('profile_name', selected_profile['name'])
         connection.save_session()
         get_my_list_change_authorisation()
     else:
-        helper.debug('Choose profile: no profiles were found!', 'Error')
+        utility.log('Choose profile: no profiles were found!', loglevel = xbmc.LOGERROR)
 
 
 def force_choose_profile():
-    addon_handle.setSetting('single_profile', 'false')
-    helper.show_message(helper.translate_string(30304), 'Error', 5000)
+    utility.set_setting('single_profile', 'false')
+    utility.show_notification(helper.translate_string(30304))
     choose_profile()
 
 
 def update_displayed_profile():
     menu_path =  xbmc.getInfoLabel('Container.FolderPath')
-    if not show_profiles:
-        addon_handle.setSetting('selected_profile', None)
+    if not utility.get_setting('show_profiles') == 'true':
+        utility.set_setting('selected_profile', None)
         connection.save_session()
     xbmc.executebuiltin('Container.Update(' + menu_path + ')')
 
@@ -68,7 +61,7 @@ There is now xsrf element in the site anymore
 this have to be changed or obsulate
 """
 def get_my_list_change_authorisation():
-    content = connection.load_site(main_url + '/WiHome')
+    content = connection.load_site(utility.main_url + '/WiHome')
     match = re.compile('"xsrf":"(.+?)"', re.DOTALL).findall(content)
     if match:
-        addon_handle.setSetting('my_list_authorization', match[0])
+        utility.set_setting('my_list_authorization', match[0])

@@ -45,7 +45,7 @@ msgid "Advanced"
 msgstr "Erweitert"
 
 msgctxt "#30011"
-msgid "Debug Logging"
+msgid "Debug logging"
 msgstr "Debug Protokollierung"
 
 msgctxt "#30012"
@@ -53,10 +53,6 @@ msgid "SSL settings"
 msgstr "SSL Einstellungen"
 
 msgctxt "#30013"
-msgid "Use advanced SSL"
-msgstr "Benutze erweitertes SSL"
-
-msgctxt "#30014"
 msgid "SSL version"
 msgstr "SSL Version"
 
@@ -90,7 +86,7 @@ msgstr "View ID - Episoden"
 
 msgctxt "#30027"
 msgid "View ID - viewing activity)"
-msgstr "View ID = Kürzlich angesehen"
+msgstr "View ID - Kürzlich angesehen"
 
 msgctxt "#30100"
 msgid "Movies"
@@ -131,6 +127,10 @@ msgstr "Genres"
 msgctxt "#30109"
 msgid "Search"
 msgstr "Suche"
+
+msgctxt "#30110"
+msgid "Next page"
+msgstr "Nächste Seite"
 
 msgctxt "#30150"
 msgid "Add to library"
@@ -189,7 +189,7 @@ msgid "Sorry! Netflix is not available in your country yet."
 msgstr "Entschuldigung! Netflix ist aktuell nicht verfügbar in Ihrem Land."
 
 msgctxt "#30301"
-msgid "Cookies have been deleted"
+msgid "Cookies have been deleted."
 msgstr "Die Cookies wurden gelöscht"
 
 msgctxt "#30302"

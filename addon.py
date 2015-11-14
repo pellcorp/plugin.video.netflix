@@ -1,35 +1,30 @@
-﻿#!/usr/bin/python
-# -*- coding: utf-8 -*-
-import urllib
-import xbmcaddon
+﻿from __future__ import unicode_literals
+from resources import utility
 from resources import connection
-from resources import helper
 from resources import listing
-from resources import main
+from resources import general
 from resources import profiles
 
-addon_handle = xbmcaddon.Addon()
+utility.log('\n\nStart of netflix plugin')
 
-helper.debug('\n\n\n Start of netflix plugin', 'Info')
-while (addon_handle.getSetting('username') or addon_handle.getSetting('password')) == '':
-    addon_handle.openSettings()
+while (utility.get_setting('username') or utility.get_setting('password')) == '':
+    utility.open_setting()
 
-helper.prepare_folders()
+utility.prepare_folders()
 connection.new_session()
 
-# get the parameters from the url
-parameters = helper.parameters_string_to_dictionary(sys.argv[2])
-name = urllib.unquote_plus(parameters.get('name', ''))
-url = urllib.unquote_plus(parameters.get('url', ''))
-mode = urllib.unquote_plus(parameters.get('mode', ''))
-thumb = urllib.unquote_plus(parameters.get('thumb', ''))
-type = urllib.unquote_plus(parameters.get('type', ''))
-season = urllib.unquote_plus(parameters.get('season', ''))
-series_id = urllib.unquote_plus(parameters.get('series_id', ''))
-run_as_widget = urllib.unquote_plus(parameters.get('widget', '')) == 'true'
+parameters = utility.parameters_to_dictionary(sys.argv[2])
+name = utility.get_parameter(parameters, 'name')
+url = utility.get_parameter(parameters, 'url')
+mode = utility.get_parameter(parameters, 'mode')
+thumb = utility.get_parameter(parameters, 'thumb')
+type = utility.get_parameter(parameters, 'type')
+season = utility.get_parameter(parameters, 'season')
+series_id = utility.get_parameter(parameters, 'series_id')
+run_as_widget = utility.get_parameter(parameters, 'widget') == 'true'
 
 if mode == 'main':
-    main.main(type)
+    general.main(type)
 elif mode == 'list_videos':
     listing.list_videos(url, type, run_as_widget)
 elif mode == 'list_genres':
@@ -41,4 +36,4 @@ elif mode == 'delete_cookies':
 elif mode == 'update_displayed_profile':
     profiles.update_displayed_profile()
 else:
-    main.index()
+    general.index()

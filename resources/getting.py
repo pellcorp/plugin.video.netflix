@@ -1,96 +1,78 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import base64
 import connection
-import helper
 import re
 import urllib
+import utility
 import xbmc
-import xbmcaddon
 import xbmcvfs
 
-addon_handle = xbmcaddon.Addon()
-addon_id = addon_handle.getAddonInfo('id')
-addon_user_data_folder = xbmc.translatePath('special://profile/addon_data/' + addon_id + '/')
-cache_folder = xbmc.translatePath(addon_user_data_folder + 'cache/')
-cache_folder_cover_tmdb = xbmc.translatePath(cache_folder + 'covers/')
-cache_folder_fanart_tmdb = xbmc.translatePath(cache_folder + 'fanart/')
 api_key = base64.b64decode('NDc2N2I0YjJiYjk0YjEwNGZhNTUxNWM1ZmY0ZTFmZWM=')
-main_url = 'http://www.netflix.com'
 
 
 def get_video_info(video_id):
     content = ''
-    cache_file = xbmc.translatePath(cache_folder + video_id + '.cache')
+    cache_file = xbmc.translatePath(utility.cache_dir() + video_id + '.cache')
     if xbmcvfs.exists(cache_file):
         file_handler = xbmcvfs.File(cache_file, 'r')
         content = file_handler.read()
         file_handler.close()
     if not content:
-        content = connection.load_site(main_url + '/JSON/BOB?movieid=' + video_id)
+        content = connection.load_site(utility.main_url + '/JSON/BOB?movieid=' + video_id)
         file_handler = xbmcvfs.File(cache_file, 'w')
         file_handler.write(content)
         file_handler.close()
-    return helper.clean_content(content)
+    return utility.clean_content(content)
 
 
 def download(video_type, video_id, title, year):
     filename = (''.join(c for c in unicode(video_id, 'utf-8') if c not in '/\\:?"*|<>')).strip() + '.jpg'
     filename_none = (''.join(c for c in unicode(video_id, 'utf-8') if c not in '/\\:?"*|<>')).strip() + '.none'
-    cover_file = xbmc.translatePath(cache_folder_cover_tmdb + filename)
-    cover_file_none = xbmc.translatePath(cache_folder_cover_tmdb + filename_none)
-    fanart_file = xbmc.translatePath(cache_folder_fanart_tmdb + filename)
+    cover_file = xbmc.translatePath(utility.cover_cache_dir() + filename)
+    cover_file_none = xbmc.translatePath(utility.cover_cache_dir() + filename_none)
+    fanart_file = xbmc.translatePath(utility.fanart_cache_dir() + filename)
     if video_type == 'tv':
-        content = connection.load_site(
-            'http://api.themoviedb.org/3/search/' + video_type + '?api_key=' + api_key + '&query='
-            + urllib.quote_plus(title.strip()) + '&first_air_date_year=' + urllib.quote_plus(year) + '&language=en')
+        content = connection.load_site(utility.tmdb_url % (video_type, api_key, urllib.quote_plus(title.strip())) +
+                                       '&first_air_date_year=' + urllib.quote_plus(year))
         result_count = re.compile('"total_results":(.+?)').findall(content)
         if result_count[0] == str(0):
             #try again without the date as sometimes Netflix get the year wrong
-            content = connection.load_site(
-                'http://api.themoviedb.org/3/search/' + video_type + '?api_key=' + api_key + '&query='
-                + urllib.quote_plus(title.strip()) + '&language=en')
+            content = connection.load_site(utility.tmdb_url % (video_type, api_key, urllib.quote_plus(title.strip())))
             result_count = re.compile('"total_results":(.+?)').findall(content)
             if result_count[0] == str(0):
                 if '(' in title:
                     title = title[:title.find('(')]
-                    content = connection.load_site(
-                        'http://api.themoviedb.org/3/search/' + video_type + '?api_key=' + api_key + '&query='
-                        + urllib.quote_plus(title.strip())+ '&first_air_date_year=' + urllib.quote_plus(year)
-                        + '&language=en')
+                    content = connection.load_site(utility.tmdb_url % (video_type, api_key,
+                                                   urllib.quote_plus(title.strip())) + '&first_air_date_year=' +
+                                                   urllib.quote_plus(year))
                 elif ':' in title:
                     title = title[:title.find(':')]
-                    content = connection.load_site(
-                        'http://api.themoviedb.org/3/search/' + video_type + '?api_key=' + api_key + '&query='
-                        + urllib.quote_plus(title.strip()) + '&first_air_date_year=' + urllib.quote_plus(year)
-                        + '&language=en')
+                    content = connection.load_site(utility.tmdb_url % (video_type, api_key,
+                                                   urllib.quote_plus(title.strip())) + '&first_air_date_year=' +
+                                                   urllib.quote_plus(year))
     else:
-        content = connection.load_site(
-            'http://api.themoviedb.org/3/search/' + video_type + '?api_key=' + api_key + '&query='
-            + urllib.quote_plus(title.strip()) + '&year=' + urllib.quote_plus(year) + '&language=en')
+        content = connection.load_site(utility.tmdb_url % (video_type, api_key, urllib.quote_plus(title.strip())) +
+                                       '&year=' + urllib.quote_plus(year))
         result_count = re.compile('"total_results":(.+?)').findall(content)
         if result_count[0] == str(0):
-            content = connection.load_site(
-                'http://api.themoviedb.org/3/search/' + video_type + '?api_key=' + api_key + '&query='
-                + urllib.quote_plus(title.strip()) + '&language=en')
+            content = connection.load_site(utility.tmdb_url % (video_type, api_key, urllib.quote_plus(title.strip())))
             result_count = re.compile('"total_results":(.+?)').findall(content)
             if result_count[0] == str(0):
                 if '(' in title:
                     title = title[:title.find('(')]
-                    content = connection.load_site(
-                        'http://api.themoviedb.org/3/search/' + video_type + '?api_key=' + api_key + '&query='
-                        + urllib.quote_plus(title.strip()) + '&language=en')
+                    content = connection.load_site(utility.tmdb_url % (video_type, api_key,
+                                                   urllib.quote_plus(title.strip())))
                 elif ':' in title:
                     title = title[:title.find(':')]
-                    content = connection.load_site(
-                        'http://api.themoviedb.org/3/search/' + video_type + '?api_key=' + api_key + '&query='
-                        + urllib.quote_plus(title.strip()) + '&year=' + urllib.quote_plus(year) + '&language=en')
+                    content = connection.load_site(utility.tmdb_url % (video_type, api_key,
+                                                   urllib.quote_plus(title.strip())) + '&year=' +
+                                                   urllib.quote_plus(year))
     match = re.compile('"poster_path":"(.+?)"', re.DOTALL).findall(content)
     # maybe its a mini-series (TMDb calls them movies)
     if not match and video_type == 'tv':
-        content = connection.load_site(
-            'http://api.themoviedb.org/3/search/movie?api_key=' + api_key + '&query=' + urllib.quote_plus(title.strip())
-            + '&year=' + urllib.quote_plus(year) + '&language=en')
+        content = connection.load_site('http://api.themoviedb.org/3/search/movie?api_key=' + api_key + '&query=' +
+                                       urllib.quote_plus(title.strip()) + '&year=' + urllib.quote_plus(year) +
+                                       '&language=en')
         match = re.compile('"poster_path":"(.+?)"', re.DOTALL).findall(content)
     if match:
         cover_url = 'http://image.tmdb.org/t/p/original' + match[0]

@@ -53,10 +53,6 @@ msgid "SSL settings"
 msgstr ""
 
 msgctxt "#30013"
-msgid "Use advanced SSL"
-msgstr ""
-
-msgctxt "#30014"
 msgid "SSL version"
 msgstr ""
 
