@@ -19,7 +19,7 @@ def load_profile():
 
 def choose_profile():
     profiles = []
-    content = connection.load_site(utility.profile_url)
+    content = utility.decode(connection.load_site(utility.profile_url))
     match = re.compile('"experience":"(.+?)".+?guid":"(.+?)".+?profileName":"(.+?)"', re.DOTALL).findall(content)
     for is_kid, token, name in match:
         profile = {'name': utility.unescape(name), 'token': token, 'is_kid': is_kid == 'jfk'}
@@ -43,7 +43,7 @@ def choose_profile():
 
 def force_choose_profile():
     utility.set_setting('single_profile', 'false')
-    utility.show_notification(helper.translate_string(30304))
+    utility.show_notification(utility.get_string(30304))
     choose_profile()
 
 
@@ -61,7 +61,7 @@ There is now xsrf element in the site anymore
 this have to be changed or obsulate
 """
 def get_my_list_change_authorisation():
-    content = connection.load_site(utility.main_url + '/WiHome')
+    content = utility.decode(connection.load_site(utility.main_url + '/WiHome'))
     match = re.compile('"xsrf":"(.+?)"', re.DOTALL).findall(content)
     if match:
         utility.set_setting('my_list_authorization', match[0])

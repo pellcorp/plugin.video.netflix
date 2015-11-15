@@ -27,8 +27,8 @@ class SSLAdapter(HTTPAdapter):
 def new_session():
     global session
     session = requests.Session()
-    session.mount('http://', HTTPAdapter())
     session.mount('https://', SSLAdapter())
+    session.headers.update({'User-Agent': 'User-Agent: Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko'})
     session.max_redirects = 5
     session.allow_redirects = True
     if xbmcvfs.exists(utility.session_file()):
@@ -62,9 +62,8 @@ def delete_cookies_session():
         utility.show_notification(utility.get_string(30302))
 
 
-def load_site(url, post = None, stream = False):
+def load_site(url, post = None):
     utility.log('Loading url: ' + url)
-    session.headers.update({'User-Agent': 'User-Agent: Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko'})
     try:
         if post:
             response = session.post(url, verify = True, data = post)
@@ -78,9 +77,5 @@ def load_site(url, post = None, stream = False):
         if post:
             response = session.post(url, verify = True, data = post)
         else:
-            response = session.get(url, url, verify = True)
-    if stream:
-        response = response.content
-    else:
-        response = response.text
-    return response
+            response = session.get(url, verify = True)
+    return response.content

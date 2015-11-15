@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 import HTMLParser
 import os
+import re
 import urllib
 import xbmc
 import xbmcaddon
@@ -12,38 +13,43 @@ addon_handle = xbmcaddon.Addon(addon_id)
 main_url = 'https://www.netflix.com'
 kids_url = 'https://www.netflix.com/Kids'
 signup_url = 'https://signup.netflix.com'
-genres_url = 'http://www.netflix.com/api/%s/%s/pathEvaluator?materialize=true&model=harris&fallbackEsn=NFCDIE-01-'
+genres_url = 'https://www.netflix.com/api/%s/%s/pathEvaluator?materialize=true&model=harris&fallbackEsn=NFCDIE-01-'
 profile_switch_url = 'https://api-global.netflix.com/desktop/account/profiles/switch?switchProfileGuid='
 profile_url = 'https://www.netflix.com/ProfilesGate?nextpage=http%3A%2F%2Fwww.netflix.com%2FDefault'
-tmdb_url = 'http://api.themoviedb.org/3/search/%s?api_key=%s&query=%s&language=en'
+picture_url = 'https://image.tmdb.org/t/p/original'
+tmdb_url = 'https://api.themoviedb.org/3/search/%s?api_key=%s&query=%s&language=de'
 
 
 def data_dir():
-    return xbmc.translatePath(addon_handle.getAddonInfo('profile'))
-
-
-def addon_dir():
-    return xbmc.translatePath(addon_handle.getAddonInfo('path'))
+    return xbmc.translatePath('special://profile/addon_data/' + addon_id + '/')
 
 
 def cache_dir():
-    return xbmc.translatePath(data_dir() + 'cache/')
+    return xbmc.translatePath('special://profile/addon_data/' + addon_id + '/cache/')
 
 
 def cover_cache_dir():
-    return xbmc.translatePath(cache_dir() + 'cover/')
+    return xbmc.translatePath('special://profile/addon_data/' + addon_id + '/cache/cover/')
 
 
 def fanart_cache_dir():
-    return xbmc.translatePath(cache_dir() + 'fanart/')
+    return xbmc.translatePath('special://profile/addon_data/' + addon_id + '/cache/fanart/')
 
 
 def session_file():
-    return xbmc.translatePath(data_dir() + '/session')
+    return xbmc.translatePath('special://profile/addon_data/' + addon_id + '/session')
 
 
 def cookie_file():
-    return xbmc.translatePath(data_dir() + '/cookie')
+    return xbmc.translatePath('special://profile/addon_data/' + addon_id + '/cookie')
+
+
+def addon_icon():
+    return addon_handle.getAddonInfo('icon')
+
+
+def addon_fanart():
+    return addon_handle.getAddonInfo('fanart')
 
 
 def log(message, loglevel = xbmc.LOGNOTICE):
@@ -51,8 +57,7 @@ def log(message, loglevel = xbmc.LOGNOTICE):
 
 
 def show_notification(message):
-    xbmc.executebuiltin('Notification(Netflix: ' + ',' + message + ',4000,' + xbmc.translatePath(addon_dir() +
-                                                                                                 'icon.png') + ')')
+    xbmc.executebuiltin(encode('Notification(Netflix: , %s, 5000, %s)' % (message, addon_icon())))
 
 
 def open_setting():
@@ -71,8 +76,34 @@ def get_string(string_id):
     return addon_handle.getLocalizedString(string_id)
 
 
+def decode(string):
+    return string.decode('utf-8')#, 'replace')
+
+
 def encode(string):
-    return string.encode('utf-8', 'replace')
+    return string.encode('utf-8')#, 'replace')
+
+
+def clean_content(string):
+    string = string.replace('\\t', '')
+    string = string.replace('\\n', '')
+    string = string.replace('\\u2013', unicode('\u2013'))
+    string = string.replace('\\u201c', unicode('\u201C'))
+    string = string.replace('\\u201e', unicode('\u201E'))
+    string = string.replace('\\', '')
+    return string
+
+
+def clean_filename(n, chars = None):
+    if isinstance(n, str):
+        return (''.join(c for c in unicode(n, 'utf-8') if c not in '/\\:?"*|<>')).strip(chars)
+    elif isinstance(n, unicode):
+        return (''.join(c for c in n if c not in '/\\:?"*|<>')).strip(chars)
+
+
+def unescape(string):
+    html_parser = HTMLParser.HTMLParser()
+    return html_parser.unescape(string)
 
 
 def prepare_folders():
@@ -107,23 +138,3 @@ def display_progress_window(progress_window, value, message):
         return False
     else:
         return True
-
-
-def clean_content(string):
-    string = string.replace('\\t', '')
-    string = string.replace('\\n', '')
-    string = string.replace('\\u2013', '-')
-    string = string.replace('\\', '')
-    return string
-
-
-def clean_filename(n, chars = None):
-    if isinstance(n, str):
-        return (''.join(c for c in unicode(n, 'utf-8') if c not in '/\\:?"*|<>')).strip(chars)
-    elif isinstance(n, unicode):
-        return (''.join(c for c in n if c not in '/\\:?"*|<>')).strip(chars)
-
-
-def unescape(string):
-    html_parser = HTMLParser.HTMLParser()
-    return html_parser.unescape(string).encode('utf-8')

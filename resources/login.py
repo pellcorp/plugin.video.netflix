@@ -12,7 +12,7 @@ def login():
     login_progress.create('Netflix', utility.get_string(30200) + '...')
     utility.display_progress_window(login_progress, 25, utility.get_string(30201))
     connection.session.cookies.clear()
-    content = connection.load_site(utility.main_url + '/Login')
+    content = utility.decode(connection.load_site(utility.main_url + '/Login'))
     match = re.compile('"LOCALE":"(.+?)"', re.DOTALL|re.IGNORECASE).findall(content)
     if match and not utility.get_setting('language'):
         utility.log('Setting language: ' + match[0])
@@ -29,7 +29,7 @@ def login():
             post_data ={'authURL': match[0], 'email': utility.get_setting('username'),
                         'password': utility.get_setting('password'), 'RememberMe': 'on'}
             utility.display_progress_window(login_progress, 50, utility.get_string(30202))
-            content = connection.load_site(utility.signup_url + '/Login', post_data)
+            content = utility.decode(connection.load_site(utility.signup_url + '/Login', post = post_data))
             if 'id="page-LOGIN"' in content:
                 utility.show_notification(utility.get_string(30303))
                 return False
@@ -44,18 +44,15 @@ def login():
             connection.save_session()
             utility.display_progress_window(login_progress, 75, utility.get_string(30203))
         if not (utility.get_setting('selected_profile') or (utility.get_setting('single_profile') == 'true')):
-            print '1'
             profiles.choose_profile()
         elif not (utility.get_setting('single_profile') == 'true') and (utility.get_setting('show_profiles') == 'true'):
-            print '2'
             profiles.choose_profile()
         elif not ((utility.get_setting('single_profile') == 'true') and (utility.get_setting('show_profiles') == 'true')):
-            print '3'
             profiles.load_profile()
         else:
             profiles.get_my_list_change_authorisation()
         if not utility.get_setting('is_kid') == 'true':
-            content = connection.load_site(utility.main_url + '/browse')
+            content = utility.decode(connection.load_site(utility.main_url + '/browse'))
             match = re.compile('"version":{"app":"(.+?)"').findall(content)
             netflix_application, netflix_version = match[0].split('-')
             utility.set_setting('netflix_application', netflix_application)

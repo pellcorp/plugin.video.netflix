@@ -24,7 +24,7 @@ def directory(name, url, mode, thumb, type = '', context_enable = True):
     if "/my-list" in url:
         entries.append((utility.get_string(30150), 'RunPlugin(plugin://' + utility.addon_id +
                         '/?mode=add_my_list_to_library)',))
-    list_item.setProperty('fanart_image', xbmc.translatePath(utility.addon_dir() + '/fanart.jpg'))
+    list_item.setProperty('fanart_image', utility.addon_fanart())
     if context_enable:
         list_item.addContextMenuItems(entries)
     else:
@@ -33,12 +33,11 @@ def directory(name, url, mode, thumb, type = '', context_enable = True):
     return directory_item
 
 
-def video_directory(name, url, mode, thumb, video_type ='', description ='', duration ='', year ='', mpaa ='',
+def video_directory(name, url, mode, thumb, video_type = '', description = '', duration = '', year = '', mpaa = '',
                     director = '', genre = '', rating = ''):
     entries = []
     if duration:
         duration = str(int(duration) * 60)
-    name = name.encode('utf-8')
     filename = utility.clean_filename(url) + '.jpg'
     cover_file = xbmc.translatePath(utility.cover_cache_dir() + filename)
     fanart_file = xbmc.translatePath(utility.fanart_cache_dir() + filename)
@@ -47,7 +46,7 @@ def video_directory(name, url, mode, thumb, video_type ='', description ='', dur
     u = sys.argv[0]
     u += '?url=' + urllib.quote_plus(url)
     u += '&mode=' + mode
-    u += '&name=' + urllib.quote_plus(name)
+    u += '&name=' + urllib.quote_plus(utility.encode(name))
     u += '&thumb=' + urllib.quote_plus(thumb)
     list_item = xbmcgui.ListItem(name)
     list_item.setArt({'icon': 'DefaultTVShows.png', 'thumb': thumb})
@@ -69,23 +68,23 @@ def video_directory(name, url, mode, thumb, video_type ='', description ='', dur
                             ')',))
     if video_type != 'episode':
         entries.append((utility.get_string(30153), 'RunPlugin(plugin://' + utility.addon_id +
-                        '/?mode=playTrailer&url=' + urllib.quote_plus(name) + ')',))
+                        '/?mode=playTrailer&url=' + urllib.quote_plus(utility.encode(name)) + ')',))
         entries.append((utility.get_string(30154), 'RunPlugin(plugin://' + utility.addon_id +
                         '/?mode=addToQueue&url=' + urllib.quote_plus(url) + ')',))
         entries.append((utility.get_string(30155), 'Container.Update(plugin://' + utility.addon_id +
-                        '/?mode=listVideos&url=' + urllib.quote_plus(main_url + '/WiMovie/' + url) +
+                        '/?mode=listVideos&url=' + urllib.quote_plus(utility.main_url + '/WiMovie/' + url) +
                         '&type=movie)',))
         entries.append((utility.get_string(30156), 'Container.Update(plugin://' + utility.addon_id +
-                        '/?mode=listVideos&url=' + urllib.quote_plus(main_url + '/WiMovie/' + url) +
+                        '/?mode=listVideos&url=' + urllib.quote_plus(utility.main_url + '/WiMovie/' + url) +
                         '&type=tv)',))
     if video_type == 'tvshow':
         entries.append((utility.get_string(30150), 'RunPlugin(plugin://' + utility.addon_id +
-                        '/?mode=addSeriesToLibrary&url=&name=' + urllib.quote_plus(name.strip()) + '&seriesID=' +
-                        urllib.quote_plus(url) + ')',))
+                        '/?mode=addSeriesToLibrary&url=&name=' + urllib.quote_plus(utility.encode(name.strip())) +
+                        '&seriesID=' + urllib.quote_plus(url) + ')',))
     elif video_type == 'movie':
         entries.append((utility.get_string(30150), 'RunPlugin(plugin://' + utility.addon_id +
                         '/?mode=addMovieToLibrary&url=' + urllib.quote_plus(url) + '&name=' +
-                        urllib.quote_plus(name.strip() + ' (' + year + ')') + ')',))
+                        urllib.quote_plus(utility.encode(name.strip())) + ' (' + year + ')' + ')',))
     list_item.addContextMenuItems(entries)
     directory_item = xbmcplugin.addDirectoryItem(handle = plugin_handle, url = u, listitem = list_item, isFolder = True)
     return directory_item
