@@ -211,3 +211,7 @@ msgstr ""
 msgctxt "#30304"
 msgid "Multiple profiles found. Choose your profile!"
 msgstr ""
+
+msgctxt "#30305"
+msgid "No trailer available!"
+msgstr ""

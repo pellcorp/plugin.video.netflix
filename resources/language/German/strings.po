@@ -211,3 +211,7 @@ msgstr "Sie sind nicht eingeloggt. Prüfen Sie Ihren Zugang und/oder starten Sie
 msgctxt "#30304"
 msgid "Multiple profiles found. Choose your profile!"
 msgstr "Verschiedene Profile gefunden. Wählen Sie Ihr Profil!"
+
+msgctxt "#30305"
+msgid "No trailer available!"
+msgstr "Kein Trailer verfügbar!"

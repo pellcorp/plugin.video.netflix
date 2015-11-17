@@ -7,7 +7,6 @@ import xbmcvfs
 
 addon_id= 'plugin.video.netflix'
 addon_handle = xbmcaddon.Addon(addon_id)
-
 main_url = 'https://www.netflix.com'
 kids_url = 'https://www.netflix.com/Kids'
 genres_url = 'https://www.netflix.com/api/%s/%s/pathEvaluator?materialize=true&model=harris'

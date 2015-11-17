@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-import connection
+import connect
 import profiles
 import re
 import utility
@@ -11,8 +11,8 @@ def login():
     login_progress = xbmcgui.DialogProgress()
     login_progress.create('Netflix', utility.get_string(30200) + '...')
     utility.display_progress_window(login_progress, 25, utility.get_string(30201))
-    connection.session.cookies.clear()
-    content = utility.decode(connection.load_site(utility.main_url + '/Login'))
+    connect.session.cookies.clear()
+    content = utility.decode(connect.load_site(utility.main_url + '/Login'))
     match = re.compile('"locale":"(.+?)"', re.DOTALL|re.IGNORECASE).findall(content)
     if match and not utility.get_setting('language'):
         utility.log('Setting language: ' + match[0])
@@ -29,8 +29,8 @@ def login():
             post_data ={'authURL': match[0], 'email': utility.get_setting('username'),
                         'password': utility.get_setting('password'), 'RememberMe': 'on'}
             utility.display_progress_window(login_progress, 50, utility.get_string(30202))
-            content = utility.decode(connection.load_site(utility.main_url + '/Login?locale=' +
-                                                          utility.get_setting('language'), post = post_data))
+            content = utility.decode(connect.load_site(utility.main_url + '/Login?locale=' +
+                                                       utility.get_setting('language'), post = post_data))
             if 'id="page-LOGIN"' in content:
                 utility.show_notification(utility.get_string(30303))
                 return False
@@ -42,18 +42,18 @@ def login():
             if match:
                 utility.log('Setting country code: ' + match[0])
                 utility.set_setting('country_code', match[0])
-            connection.save_session()
+            connect.save_session()
             utility.display_progress_window(login_progress, 75, utility.get_string(30203))
         if not (utility.get_setting('selected_profile') or (utility.get_setting('single_profile') == 'true')):
-            profiles.choose_profile()
+            profiles.choose()
         elif not (utility.get_setting('single_profile') == 'true') and (utility.get_setting('show_profiles') == 'true'):
-            profiles.choose_profile()
+            profiles.choose()
         elif not ((utility.get_setting('single_profile') == 'true') and (utility.get_setting('show_profiles') == 'true')):
-            profiles.load_profile()
+            profiles.load()
         else:
             profiles.get_my_list_change_authorisation()
         if not utility.get_setting('is_kid') == 'true':
-            content = utility.decode(connection.load_site(utility.main_url + '/browse'))
+            content = utility.decode(connect.load_site(utility.main_url + '/browse'))
             match = re.compile('"version":{"app":"(.+?)"').findall(content)
             netflix_application, netflix_version = match[0].split('-')
             utility.set_setting('netflix_application', netflix_application)
