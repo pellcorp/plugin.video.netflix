@@ -13,31 +13,32 @@ def login():
     utility.display_progress_window(login_progress, 25, utility.get_string(30201))
     connection.session.cookies.clear()
     content = utility.decode(connection.load_site(utility.main_url + '/Login'))
-    match = re.compile('"LOCALE":"(.+?)"', re.DOTALL|re.IGNORECASE).findall(content)
+    match = re.compile('"locale":"(.+?)"', re.DOTALL|re.IGNORECASE).findall(content)
     if match and not utility.get_setting('language'):
         utility.log('Setting language: ' + match[0])
         utility.set_setting('language', match[0])
     if not 'Sorry, Netflix ' in content:
         match = re.compile('id="signout".+?authURL=(.+?)"', re.DOTALL).findall(content)
         if match:
-            utility.log('Setting authorization url (signout): ' + match[0])
+            utility.log('Setting authorization url: ' + match[0])
             utility.set_setting('authorization_url', match[0])
         if 'id="page-LOGIN"' in content:
             match = re.compile('name="authURL" value="(.+?)"', re.DOTALL).findall(content)
-            utility.log('Setting authorization url (login): ' + match[0])
+            utility.log('Setting authorization url: ' + match[0])
             utility.set_setting('authorization_url', match[0])
             post_data ={'authURL': match[0], 'email': utility.get_setting('username'),
                         'password': utility.get_setting('password'), 'RememberMe': 'on'}
             utility.display_progress_window(login_progress, 50, utility.get_string(30202))
-            content = utility.decode(connection.load_site(utility.signup_url + '/Login', post = post_data))
+            content = utility.decode(connection.load_site(utility.main_url + '/Login?locale=' +
+                                                          utility.get_setting('language'), post = post_data))
             if 'id="page-LOGIN"' in content:
                 utility.show_notification(utility.get_string(30303))
                 return False
-            match = re.compile('"LOCALE":"(.+?)"', re.DOTALL|re.IGNORECASE).findall(content)
+            match = re.compile('"locale":"(.+?)"', re.DOTALL|re.IGNORECASE).findall(content)
             if match and not utility.get_setting('language'):
                 utility.log('Setting language: ' + match[0])
                 utility.set_setting('language', match[0])
-            match = re.compile('"COUNTRY":"(.+?)"', re.DOTALL|re.IGNORECASE).findall(content)
+            match = re.compile('"country":"(.+?)"', re.DOTALL|re.IGNORECASE).findall(content)
             if match:
                 utility.log('Setting country code: ' + match[0])
                 utility.set_setting('country_code', match[0])

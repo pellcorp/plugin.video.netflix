@@ -26,7 +26,7 @@ def video_info(video_id):
     return utility.clean_content(utility.decode(content))
 
 
-def tmdb_info(video_type, video_id, title, year):
+def tmdb_cover(video_type, video_id, title, year):
     filename = utility.clean_filename(video_id) + '.jpg'
     filename_none = utility.clean_filename(video_id) + '.none'
     cover_file = xbmc.translatePath(utility.cover_cache_dir() + filename)

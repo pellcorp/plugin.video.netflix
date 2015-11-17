@@ -127,7 +127,7 @@ def list_video(video_id, title, thumb_url, is_episode, hide_movies, type, url):
         if not xbmcvfs.exists(cover_file) and not xbmcvfs.exists(cover_file_none):
             utility.log('Downloading cover art. video_type: %s, video_id: %s, title: %s, year: %s' % (video_type_temp,
                         video_id, title_temp, year_temp))
-            getting.tmdb_info(video_type_temp, video_id, title_temp, year_temp)
+            getting.tmdb_cover(video_type_temp, video_id, title_temp, year_temp)
     match = re.compile('src=".+?">.*?<.*?>(.+?)<', re.DOTALL).findall(video_details)
     if match:
         description_temp = match[0]
@@ -149,8 +149,8 @@ def list_video(video_id, title, thumb_url, is_episode, hide_movies, type, url):
         next_mode = 'list_seasons'
     added = False
     if '/my-list' in url and video_type_temp == type:
-        adding.add_video_directory_r(title, video_id, next_mode, thumb_url, video_type, description, duration, year,
-                                     mpaa, director, genre, rating)
+        adding.video_directory(title, video_id, next_mode, thumb_url, video_type, description, duration, year, mpaa,
+                               director, genre, rating, remove = True)
         added = True
     elif video_type == 'movie' and hide_movies:
         pass
@@ -166,6 +166,7 @@ def list_genres(type, video_type):
     if utility.get_setting('is_kid') == 'true':
         type = 'KidsAltGenre'
         content = utility.decode(connection.load_site(utility.kids_url))
+        print utility.encode(content)
         match = re.compile('/' + type + '\\?agid=(.+?)">(.+?)<', re.DOTALL).findall(content)
         unique_match = set((k[0].strip(), k[1].strip()) for k in match)
     else:

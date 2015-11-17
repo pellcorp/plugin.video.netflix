@@ -10,7 +10,8 @@
         <setting label="30000" type="lsep"/>
         <setting id="debug" type="bool" label="30011" default="true"/>
         <setting label="30012" type="lsep"/>
-        <setting id="ssl_version" type="labelenum" label="30013" values="Auto|SSLv23|SSLv3|TLSv1|TLSv1_1|TLSv1_2" default="Auto"/>
+        <setting id="ssl_enabled" type="bool" label="30013" default="true"/>
+        <setting id="ssl_version" type="labelenum" label="30014" values="Auto|SSLv2|SSLv3|SSLv23|TLSv1" default="SSLv23"/>
 	</category>
     <category label="30020">
         <setting label="30000" type="lsep"/>

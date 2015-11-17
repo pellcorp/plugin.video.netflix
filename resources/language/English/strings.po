@@ -53,6 +53,10 @@ msgid "SSL settings"
 msgstr ""
 
 msgctxt "#30013"
+msgid "Use advanced SSL"
+msgstr ""
+
+msgctxt "#30014"
 msgid "SSL version"
 msgstr ""
 
@@ -149,14 +153,18 @@ msgid "Play trailer"
 msgstr ""
 
 msgctxt "#30154"
-msgid "Add to my list"
+msgid "Remove from my list"
 msgstr ""
 
 msgctxt "#30155"
-msgid "Similar Movies"
+msgid "Add to my list"
 msgstr ""
 
 msgctxt "#30156"
+msgid "Similar Movies"
+msgstr ""
+
+msgctxt "#30157"
 msgid "Similar TV Shows"
 msgstr ""
 

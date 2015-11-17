@@ -2,35 +2,20 @@ from __future__ import unicode_literals
 import resources.lib.certifi as certifi
 import pickle
 import requests
-import ssl
 import utility
 import xbmc
 import xbmcvfs
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.poolmanager import PoolManager
 
 session = None
-
-
-class SSLAdapter(HTTPAdapter):
-    def init_poolmanager(self, connections, maxsize, block = False):
-        ssl_version = utility.get_setting('ssl_version')
-        ssl_version = None if ssl_version == 'Auto' else ssl_version
-        self.poolmanager = PoolManager(num_pools = connections,
-                                       maxsize = maxsize,
-                                       block = block,
-                                       ssl_version = ssl_version,
-                                       ca_certs = certifi.where(),
-                                       cert_reqs = 'CERT_REQUIRED')
 
 
 def new_session():
     global session
     session = requests.Session()
-    session.mount('https://', SSLAdapter())
     session.headers.update({'User-Agent': 'User-Agent: Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko'})
     session.max_redirects = 5
     session.allow_redirects = True
+    session.verify = certifi.where()
     if xbmcvfs.exists(utility.session_file()):
         file_handler = xbmcvfs.File(utility.session_file(), 'rb')
         content = file_handler.read()

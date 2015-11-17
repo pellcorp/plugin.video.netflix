@@ -10,7 +10,8 @@ show_profiles = utility.get_setting('show_profiles') == 'true'
 
 def load_profile():
     if utility.get_setting('selected_profile'):
-        connection.load_site(utility.profile_switch_url + utility.get_setting('selected_profile'))
+        connection.load_site(utility.profile_switch_url + utility.get_setting('selected_profile') +
+                             utility.get_setting('authorization_ur'))
         connection.save_session()
     else:
         utility.log('Load profile: no stored profile found!', loglevel = xbmc.LOGERROR)

@@ -34,7 +34,7 @@ def directory(name, url, mode, thumb, type = '', context_enable = True):
 
 
 def video_directory(name, url, mode, thumb, video_type = '', description = '', duration = '', year = '', mpaa = '',
-                    director = '', genre = '', rating = ''):
+                    director = '', genre = '', rating = '', remove = False):
     entries = []
     if duration:
         duration = str(int(duration) * 60)
@@ -60,30 +60,34 @@ def video_directory(name, url, mode, thumb, video_type = '', description = '', d
     if video_type == 'tvshow':
         if utility.get_setting('browse_tv_shows') == 'true':
             entries.append((utility.get_string(30151), 'Container.Update(plugin://' + utility.addon_id +
-                            '/?mode=playVideoMain&url=' + urllib.quote_plus(url) +'&thumb=' + urllib.quote_plus(thumb) +
+                            '/?mode=play_video_main&url=' + urllib.quote_plus(url) +'&thumb=' + urllib.quote_plus(thumb) +
                             ')',))
         else:
             entries.append((utility.get_string(30152), 'Container.Update(plugin://' + utility.addon_id +
-                            '/?mode=listSeasons&url=' + urllib.quote_plus(url) +'&thumb=' + urllib.quote_plus(thumb) +
+                            '/?mode=list_seasons&url=' + urllib.quote_plus(url) +'&thumb=' + urllib.quote_plus(thumb) +
                             ')',))
     if video_type != 'episode':
         entries.append((utility.get_string(30153), 'RunPlugin(plugin://' + utility.addon_id +
-                        '/?mode=playTrailer&url=' + urllib.quote_plus(utility.encode(name)) + ')',))
-        entries.append((utility.get_string(30154), 'RunPlugin(plugin://' + utility.addon_id +
-                        '/?mode=addToQueue&url=' + urllib.quote_plus(url) + ')',))
-        entries.append((utility.get_string(30155), 'Container.Update(plugin://' + utility.addon_id +
-                        '/?mode=listVideos&url=' + urllib.quote_plus(utility.main_url + '/WiMovie/' + url) +
-                        '&type=movie)',))
+                        '/?mode=play_trailer&url=' + urllib.quote_plus(utility.encode(name)) + ')',))
+        if remove:
+            entries.append((utility.get_string(30154), 'RunPlugin(plugin://' + utility.addon_id +
+                            '/?mode=remove_from_queue&url=' + urllib.quote_plus(url) + ')',))
+        else:
+            entries.append((utility.get_string(30155), 'RunPlugin(plugin://' + utility.addon_id +
+                            '/?mode=add_to_queue&url=' + urllib.quote_plus(url) + ')',))
         entries.append((utility.get_string(30156), 'Container.Update(plugin://' + utility.addon_id +
-                        '/?mode=listVideos&url=' + urllib.quote_plus(utility.main_url + '/WiMovie/' + url) +
+                        '/?mode=list_videos&url=' + urllib.quote_plus(utility.main_url + '/WiMovie/' + url) +
+                        '&type=movie)',))
+        entries.append((utility.get_string(30157), 'Container.Update(plugin://' + utility.addon_id +
+                        '/?mode=list_videos&url=' + urllib.quote_plus(utility.main_url + '/WiMovie/' + url) +
                         '&type=tv)',))
     if video_type == 'tvshow':
         entries.append((utility.get_string(30150), 'RunPlugin(plugin://' + utility.addon_id +
-                        '/?mode=addSeriesToLibrary&url=&name=' + urllib.quote_plus(utility.encode(name.strip())) +
+                        '/?mode=add_series_to_library&url=&name=' + urllib.quote_plus(utility.encode(name.strip())) +
                         '&seriesID=' + urllib.quote_plus(url) + ')',))
     elif video_type == 'movie':
         entries.append((utility.get_string(30150), 'RunPlugin(plugin://' + utility.addon_id +
-                        '/?mode=addMovieToLibrary&url=' + urllib.quote_plus(url) + '&name=' +
+                        '/?mode=add_movie_to_library&url=' + urllib.quote_plus(url) + '&name=' +
                         urllib.quote_plus(utility.encode(name.strip())) + ' (' + year + ')' + ')',))
     list_item.addContextMenuItems(entries)
     directory_item = xbmcplugin.addDirectoryItem(handle = plugin_handle, url = u, listitem = list_item, isFolder = True)

@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 import HTMLParser
-import os
-import re
 import urllib
 import xbmc
 import xbmcaddon
@@ -12,8 +10,7 @@ addon_handle = xbmcaddon.Addon(addon_id)
 
 main_url = 'https://www.netflix.com'
 kids_url = 'https://www.netflix.com/Kids'
-signup_url = 'https://signup.netflix.com'
-genres_url = 'https://www.netflix.com/api/%s/%s/pathEvaluator?materialize=true&model=harris&fallbackEsn=NFCDIE-01-'
+genres_url = 'https://www.netflix.com/api/%s/%s/pathEvaluator?materialize=true&model=harris'
 profile_switch_url = 'https://api-global.netflix.com/desktop/account/profiles/switch?switchProfileGuid='
 profile_url = 'https://www.netflix.com/ProfilesGate?nextpage=http%3A%2F%2Fwww.netflix.com%2FDefault'
 picture_url = 'https://image.tmdb.org/t/p/original'
@@ -42,6 +39,10 @@ def session_file():
 
 def cookie_file():
     return xbmc.translatePath('special://profile/addon_data/' + addon_id + '/cookie')
+
+
+def addon_dir():
+    return addon_handle.getAddonInfo('path')
 
 
 def addon_icon():
@@ -77,11 +78,11 @@ def get_string(string_id):
 
 
 def decode(string):
-    return string.decode('utf-8')#, 'replace')
+    return string.decode('utf-8')
 
 
 def encode(string):
-    return string.encode('utf-8')#, 'replace')
+    return string.encode('utf-8')
 
 
 def clean_content(string):

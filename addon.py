@@ -3,10 +3,10 @@ from resources import utility
 from resources import connection
 from resources import listing
 from resources import general
+from resources import play
 from resources import profiles
 
 utility.log('\n\nStart of netflix plugin')
-
 while (utility.get_setting('username') or utility.get_setting('password')) == '':
     utility.open_setting()
 
@@ -31,6 +31,8 @@ elif mode == 'list_genres':
     listing.list_genres(url, type)
 elif mode == 'list_tv_genres':
     listing.list_tv_genres(type)
+elif mode == 'play_trailer':
+    play.trailer(url)
 elif mode == 'delete_cookies':
     connection.delete_cookies_session()
 elif mode == 'update_displayed_profile':
