@@ -1,11 +1,13 @@
+#!/usr/bin/python
 from __future__ import unicode_literals
+
 import HTMLParser
 import urllib
 import xbmc
 import xbmcaddon
 import xbmcvfs
 
-addon_id= 'plugin.video.netflix'
+addon_id = 'plugin.video.netflix'
 addon_handle = xbmcaddon.Addon(addon_id)
 main_url = 'https://www.netflix.com'
 kids_url = 'https://www.netflix.com/Kids'
@@ -52,8 +54,8 @@ def addon_fanart():
     return addon_handle.getAddonInfo('fanart')
 
 
-def log(message, loglevel = xbmc.LOGNOTICE):
-    xbmc.log(encode(addon_id + ': ' + message), level = loglevel)
+def log(message, loglevel=xbmc.LOGNOTICE):
+    xbmc.log(encode(addon_id + ': ' + message), level=loglevel)
 
 
 def show_notification(message):
@@ -94,7 +96,7 @@ def clean_content(string):
     return string
 
 
-def clean_filename(n, chars = None):
+def clean_filename(n, chars=None):
     if isinstance(n, str):
         return (''.join(c for c in unicode(n, 'utf-8') if c not in '/\\:?"*|<>')).strip(chars)
     elif isinstance(n, unicode):

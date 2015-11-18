@@ -1,10 +1,13 @@
+#!/usr/bin/python
 from __future__ import unicode_literals
+
 import base64
+import xbmc
+import xbmcvfs
+
 import connect
 import search
 import utility
-import xbmc
-import xbmcvfs
 
 
 def video_info(video_id):

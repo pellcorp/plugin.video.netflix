@@ -239,6 +239,7 @@ class TV(TMDB):
         self._set_attrs_to_values(response)
         return response
 
+
 class TV_Seasons(TMDB):
     """
     TV Seasons functionality.
@@ -248,7 +249,7 @@ class TV_Seasons(TMDB):
     BASE_PATH = 'tv/{id}/season/{season_number}'
     URLS = {
         'info': '',
-        'credits': '/credits', 
+        'credits': '/credits',
         'external_ids': '/external_ids',
         'images': '/images',
         'videos': '/videos',
@@ -343,6 +344,7 @@ class TV_Seasons(TMDB):
         self._set_attrs_to_values(response)
         return response
 
+
 class TV_Episodes(TMDB):
     """
     TV Episodes functionality.
@@ -352,7 +354,7 @@ class TV_Episodes(TMDB):
     BASE_PATH = 'tv/{series_id}/season/{season_number}/episode/{episode_number}'
     URLS = {
         'info': '',
-        'credits': '/credits', 
+        'credits': '/credits',
         'external_ids': '/external_ids',
         'images': '/images',
         'rating': '/rating',
@@ -470,6 +472,7 @@ class TV_Episodes(TMDB):
         self._set_attrs_to_values(response)
         return response
 
+
 class Networks(TMDB):
     """
     Networks functionality.
@@ -499,4 +502,3 @@ class Networks(TMDB):
         response = self._GET(path, kwargs)
         self._set_attrs_to_values(response)
         return response
-

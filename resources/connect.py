@@ -1,10 +1,13 @@
+#!/usr/bin/python
 from __future__ import unicode_literals
-import resources.lib.certifi as certifi
+
 import pickle
 import requests
-import utility
 import xbmc
 import xbmcvfs
+
+import resources.lib.certifi as certifi
+import utility
 
 session = None
 
@@ -47,20 +50,20 @@ def delete_cookies_session():
         utility.show_notification(utility.get_string(30302))
 
 
-def load_site(url, post = None):
+def load_site(url, post=None):
     utility.log('Loading url: ' + url)
     try:
         if post:
-            response = session.post(url, verify = True, data = post)
+            response = session.post(url, verify=True, data=post)
         else:
-            response = session.get(url, verify = True)
+            response = session.get(url, verify=True)
     except AttributeError:
-        utility.log('Session is missing', loglevel = xbmc.LOGERROR)
+        utility.log('Session is missing', loglevel=xbmc.LOGERROR)
         utility.show_notification(utility.get_string(30301))
         new_session()
         save_session()
         if post:
-            response = session.post(url, verify = True, data = post)
+            response = session.post(url, verify=True, data=post)
         else:
-            response = session.get(url, verify = True)
+            response = session.get(url, verify=True)
     return response.content

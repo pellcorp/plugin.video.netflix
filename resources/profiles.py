@@ -1,11 +1,12 @@
+#!/usr/bin/python
 from __future__ import unicode_literals
-import connect
+
 import re
-import utility
 import xbmc
 import xbmcgui
 
-show_profiles = utility.get_setting('show_profiles') == 'true'
+import connect
+import utility
 
 
 def load():
@@ -14,7 +15,7 @@ def load():
                           utility.get_setting('authorization_ur'))
         connect.save_session()
     else:
-        utility.log('Load profile: no stored profile found!', loglevel = xbmc.LOGERROR)
+        utility.log('Load profile: no stored profile found!', loglevel=xbmc.LOGERROR)
     get_my_list_change_authorisation()
 
 
@@ -39,7 +40,7 @@ def choose():
         connect.save_session()
         get_my_list_change_authorisation()
     else:
-        utility.log('Choose profile: no profiles were found!', loglevel = xbmc.LOGERROR)
+        utility.log('Choose profile: no profiles were found!', loglevel=xbmc.LOGERROR)
 
 
 def force_choose():
@@ -49,19 +50,19 @@ def force_choose():
 
 
 def update_displayed():
-    menu_path =  xbmc.getInfoLabel('Container.FolderPath')
+    menu_path = xbmc.getInfoLabel('Container.FolderPath')
     if not utility.get_setting('show_profiles') == 'true':
         utility.set_setting('selected_profile', None)
         connect.save_session()
     xbmc.executebuiltin('Container.Update(' + menu_path + ')')
 
 
-"""
-Looks like this function was intended for the owners list.
-There is now xsrf element in the site anymore
-this have to be changed or obsulate
-"""
 def get_my_list_change_authorisation():
+    """
+    Looks like this function was intended for the owners list.
+    There is now xsrf element in the site anymore
+    this have to be changed or obsulate
+    """
     content = utility.decode(connect.load_site(utility.main_url + '/WiHome'))
     match = re.compile('"xsrf":"(.+?)"', re.DOTALL).findall(content)
     if match:

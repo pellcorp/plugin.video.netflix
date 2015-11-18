@@ -1,10 +1,12 @@
-﻿from __future__ import unicode_literals
-from resources import utility
+﻿#!/usr/bin/python
+from __future__ import unicode_literals
+
 from resources import connect
-from resources import list
 from resources import general
+from resources import list
 from resources import play
 from resources import profiles
+from resources import utility
 
 utility.log('\n\nStart of netflix plugin')
 while (utility.get_setting('username') or utility.get_setting('password')) == '':
@@ -18,21 +20,19 @@ name = utility.get_parameter(parameters, 'name')
 url = utility.get_parameter(parameters, 'url')
 mode = utility.get_parameter(parameters, 'mode')
 thumb = utility.get_parameter(parameters, 'thumb')
-type = utility.get_parameter(parameters, 'type')
+video_type = utility.get_parameter(parameters, 'type')
 season = utility.get_parameter(parameters, 'season')
 series_id = utility.get_parameter(parameters, 'series_id')
 run_as_widget = utility.get_parameter(parameters, 'widget') == 'true'
 
 if mode == 'main':
-    general.main(type)
+    general.main(video_type)
 elif mode == 'list_videos':
-    list.videos(url, type, run_as_widget)
+    list.videos(url, video_type, run_as_widget)
 elif mode == 'list_genres':
-    list.genres(url, type)
-elif mode == 'list_tv_genres':
-    list.tv_genres(type)
+    list.genres(video_type)
 elif mode == 'play_trailer':
-    play.trailer(url, type)
+    play.trailer(url, video_type)
 elif mode == 'delete_cookies':
     connect.delete_cookies_session()
 elif mode == 'update_displayed_profile':

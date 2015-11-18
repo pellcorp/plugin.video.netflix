@@ -14,6 +14,7 @@ Created by Celia Oakley on 2013-10-31.
 
 from .base import TMDB
 
+
 class Movies(TMDB):
     """
     Movies functionality.
@@ -443,6 +444,7 @@ class Collections(TMDB):
         self._set_attrs_to_values(response)
         return response
 
+
 class Companies(TMDB):
     """
     Companies functionality. 
@@ -475,7 +477,7 @@ class Companies(TMDB):
         response = self._GET(path, kwargs)
         self._set_attrs_to_values(response)
         return response
-        
+
     def movies(self, **kwargs):
         """
         Get the list of movies associated with a particular company.
@@ -493,6 +495,7 @@ class Companies(TMDB):
         response = self._GET(path, kwargs)
         self._set_attrs_to_values(response)
         return response
+
 
 class Keywords(TMDB):
     """
@@ -539,6 +542,7 @@ class Keywords(TMDB):
         response = self._GET(path, kwargs)
         self._set_attrs_to_values(response)
         return response
+
 
 class Reviews(TMDB):
     """
