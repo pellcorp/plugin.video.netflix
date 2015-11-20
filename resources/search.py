@@ -1,8 +1,9 @@
-#!/usr/bin/python
 from __future__ import unicode_literals
 
 import base64
+import urllib
 
+import list
 import resources.lib.tmdbsimple as tmdbsimple
 import utility
 
@@ -10,9 +11,15 @@ tmdbsimple.API_KEY = base64.b64decode('NDc2N2I0YjJiYjk0YjEwNGZhNTUxNWM1ZmY0ZTFmZ
 language = utility.get_setting('language').split('-')[0]
 
 
+def netflix(video_type):
+    search_string = utility.keyboard()
+    if search_string:
+        list.search(search_string, video_type)
+
+
 def tmdb(video_type, title, year=None):
     search = tmdbsimple.Search()
-    if video_type == 'tv':
+    if video_type.startswith('tv'):
         content = search.tv(query=utility.encode(title), first_air_date_year=year, language=language,
                             include_adult='true')
         if content['total_results'] == 0:
@@ -45,8 +52,15 @@ def tmdb(video_type, title, year=None):
 
 
 def trailer(video_type, tmdb_id):
-    if video_type == 'tv':
-        content = tmdbsimple.TV(tmdb_id).videos()
+    content = None
+    if video_type.startswith('tv'):
+        try:
+            content = tmdbsimple.TV(tmdb_id).videos()
+        except Exception:
+            pass
     else:
-        content = tmdbsimple.Movies(tmdb_id).videos()
+        try:
+            content = tmdbsimple.Movies(tmdb_id).videos()
+        except Exception:
+            pass
     return content

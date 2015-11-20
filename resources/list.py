@@ -1,4 +1,3 @@
-#!/usr/bin/python
 from __future__ import unicode_literals
 
 import json
@@ -24,7 +23,7 @@ def videos(url, video_type, run_as_widget=False):
     if not run_as_widget:
         loading_progress = xbmcgui.DialogProgress()
         loading_progress.create('Netflix', utility.get_string(30205) + '...')
-        utility.display_progress_window(loading_progress, 0, '...')
+        utility.progress_window(loading_progress, 0, '...')
     xbmcplugin.setContent(plugin_handle, 'movies')
     content = utility.decode(connect.load_site(url))
     if not 'id="page-LOGIN"' in content:
@@ -36,16 +35,23 @@ def videos(url, video_type, run_as_widget=False):
             content = utility.clean_content(content)
             match = None
             if not match: match = re.compile('"\$type":"leaf",.*?"id":([0-9]+)', re.DOTALL).findall(content)
+            print '1: ' + str(match)
             if not match: match = re.compile('<a href="\/watch\/([0-9]+)', re.DOTALL).findall(content)
+            print '2: ' + str(match)
             if not match: match = re.compile('<span id="dbs(.+?)_.+?alt=".+?"', re.DOTALL).findall(content)
+            print '3: ' + str(match)
             if not match: match = re.compile('<span class="title.*?"><a id="b(.+?)_', re.DOTALL).findall(content)
+            print '4: ' + str(match)
             if not match: match = re.compile('"boxart":".+?","titleId":(.+?),', re.DOTALL).findall(content)
+            print '5: ' + str(match)
             if not match: match = re.compile('WiPlayer\?movieid=([0-9]+?)&', re.DOTALL).findall(content)
+            print '6: ' + str(match)
+            print len(match)
             i = 1
             for video_id in match:
                 if int(video_id) > 10000000:
                     if not run_as_widget:
-                        utility.display_progress_window(loading_progress, i * 100 / len(match), '...')
+                        utility.progress_window(loading_progress, i * 100 / len(match), '...')
                     video(video_id, '', '', False, False, video_type, url)
                 i += 1
             match1 = re.compile('&pn=(.+?)&', re.DOTALL).findall(url)
@@ -78,61 +84,60 @@ def videos(url, video_type, run_as_widget=False):
     else:
         connect.delete_cookies_session()
         utility.log('User is not logged in.', loglevel=xbmc.LOGERROR)
-        utility.show_notification(utility.get_string(30303))
+        utility.notification(utility.get_string(30303))
 
 
 def video(video_id, title, thumb_url, is_episode, hide_movies, video_type, url):
+    added = False
     year = ''
     mpaa = ''
     duration = ''
     description = ''
     director = ''
     genre = ''
-    rating = ''
+    rating = 0.0
     video_details = get.video_info(video_id)
-    match = re.compile('<span class="title.*?>(.+?)<', re.DOTALL).findall(video_details)
+    match = re.compile('<span class="title.*?>(.+?)</span', re.DOTALL).findall(video_details)
     if not title:
         title = match[0].strip()
-    match = re.compile('<span class="year.*?>(.+?)<', re.DOTALL).findall(video_details)
+    match = re.compile('<span class="year.*?>(.+?)</span', re.DOTALL).findall(video_details)
     if match:
-        year = match[0]
+        year = match[0].partition('-')[0]
     if not thumb_url:
         match = re.compile('src="(.+?)"', re.DOTALL).findall(video_details)
         thumb_url = match[0].replace('/webp/', '/images/').replace('.webp', '.jpg')
-    match = re.compile('<span class="mpaaRating.*?>(.+?)<', re.DOTALL).findall(video_details)
+    match = re.compile('<span class="mpaaRating.*?>(.+?)</span', re.DOTALL).findall(video_details)
     if match:
         mpaa = match[0].strip()
-    match = re.compile('<span class="duration.*?>(.+?)<', re.DOTALL).findall(video_details)
+    match = re.compile('<span class="duration.*?>(.+?)</span', re.DOTALL).findall(video_details)
     if match:
         duration = match[0].lower()
     if duration.split(' ')[-1].startswith('min'):
-        video_type = 'movie'
-        video_type_temp = video_type
+        type = 'movie'
+        video_type_temp = type
         duration = duration.split(' ')[0]
     else:
         video_type_temp = 'tv'
         if is_episode:
-            video_type = 'episode'
-            year = ''
+            type = 'episode'
         else:
-            video_type = 'tvshow'
+            type = 'tvshow'
         duration = ''
     if utility.get_setting('use_tmdb') == 'true':
         year_temp = year
         title_temp = title
         if ' - ' in title_temp:
-            title_temp = title_temp[:title_temp.index(' - ')]
+            title_temp = title_temp[title_temp.index(' - '):]
         if '-' in year_temp:
             year_temp = year_temp.split('-')[0]
         filename = utility.clean_filename(video_id) + '.jpg'
         filename_none = utility.clean_filename(video_id) + '.none'
         cover_file = xbmc.translatePath(utility.cover_cache_dir() + filename)
         cover_file_none = xbmc.translatePath(utility.cover_cache_dir() + filename_none)
-        if not xbmcvfs.exists(cover_file) and not xbmcvfs.exists(cover_file_none):
-            utility.log('Downloading cover art. video_type: %s, video_id: %s, title: %s, year: %s' % (video_type_temp,
-                                                                                                      video_id,
-                                                                                                      title_temp,
-                                                                                                      year_temp))
+        if not (xbmcvfs.exists(cover_file) or xbmcvfs.exists(cover_file_none)):
+            utility.log('Downloading cover art. type: %s, video_id: %s, title: %s, year: %s' % (video_type_temp,
+                                                                                                video_id, title_temp,
+                                                                                                year_temp))
             get.cover(video_type_temp, video_id, title_temp, year_temp)
     match = re.compile('src=".+?">.*?<.*?>(.+?)<', re.DOTALL).findall(video_details)
     if match:
@@ -143,25 +148,24 @@ def video(video_id, title, thumb_url, is_episode, hide_movies, video_type, url):
     match = re.compile('Director:</dt><dd>(.+?)<', re.DOTALL).findall(video_details)
     if match:
         director = match[0].strip()
-    match = re.compile('<span class="genre.*?>(.+?)<', re.DOTALL).findall(video_details)
+    match = re.compile('<span class="genre.*?>(.+?)</span', re.DOTALL).findall(video_details)
     if match:
         genre = match[0]
-    match = re.compile('<span class="rating">(.+?)<', re.DOTALL).findall(video_details)
-    if match:
-        rating = match[0]
+    match = re.compile('<span class="rating">(.+?)</span', re.DOTALL).findall(video_details)
+    if len(match) > 0:
+        rating = float(match[0])
     title = utility.unescape(title)
     next_mode = 'play_video_main'
-    if utility.get_setting('browse_tv_shows') == 'true' and video_type == 'tvshow':
+    if utility.get_setting('browse_tv_shows') == 'true' and type == 'tvshow':
         next_mode = 'list_seasons'
-    added = False
     if '/my-list' in url and video_type_temp == video_type:
-        add.video_directory(title, video_id, next_mode, thumb_url, video_type, description, duration, year, mpaa,
+        add.video_directory(title, video_id, next_mode, thumb_url, type, description, duration, year, mpaa,
                             director, genre, rating, remove=True)
         added = True
-    elif video_type == 'movie' and hide_movies:
+    elif type == 'movie' and hide_movies:
         pass
     elif video_type_temp == video_type or video_type == 'both':
-        add.video_directory(title, video_id, next_mode, thumb_url, video_type, description, duration, year, mpaa,
+        add.video_directory(title, video_id, next_mode, thumb_url, type, description, duration, year, mpaa,
                             director, genre, rating)
         added = True
     return added
@@ -173,14 +177,14 @@ def genres(video_type):
     xbmcplugin.addSortMethod(plugin_handle, xbmcplugin.SORT_METHOD_LABEL)
     if video_type == 'tv':
         post_data = '{"paths":[["genres",83,"subgenres",{"from":0,"to":20},"summary"],["genres",83,"subgenres",' \
-                    '"summary"]],"authURL":"' + utility.get_setting('authorization_url') + '"})'
+                    '"summary"]],"authURL":"%s"}' % utility.get_setting('authorization_url')
     elif video_type == 'movie':
-        post_data = '{"paths":[["genreList",{"from":0,"to":24},["id","menuName"]],["genreList"]],"authURL":"' + \
-                    utility.get_setting('authorization_url') + '"})'
+        post_data = '{"paths":[["genreList",{"from":0,"to":24},["id","menuName"]],["genreList"]],"authURL":"%s"}' \
+                    % utility.get_setting('authorization_url')
     else:
         pass
     content = utility.decode(connect.load_site(
-        utility.genres_url % (utility.get_setting('netflix_application'), utility.get_setting('netflix_version')),
+        utility.evaluator_url % (utility.get_setting('netflix_application'), utility.get_setting('netflix_version')),
         post=post_data))
     matches = json.loads(content)['value']['genres']
     for k in matches:
@@ -198,3 +202,77 @@ def genres(video_type):
         elif not genre_id == '83' and video_type == 'movie':
             add.directory(title, utility.main_url + '/browse/genre/' + genre_id, 'list_videos', '', video_type)
     xbmcplugin.endOfDirectory(plugin_handle)
+
+
+def view_activity(video_type, run_as_widget=False):
+    count = 0
+    video_ids = []
+    loading_progress = None
+    if not run_as_widget:
+        loading_progress = xbmcgui.DialogProgress()
+        loading_progress.create('Netflix', utility.get_string(30205) + '...')
+        utility.progress_window(loading_progress, 0, '...')
+    xbmcplugin.setContent(plugin_handle, 'movies')
+    content = utility.decode(connect.load_site(utility.main_url + '/WiViewingActivity'))
+    series_id = re.compile('(<li .*?data-series=.*?</li>)', re.DOTALL).findall(content)
+    for i in range(1, len(series_id), 1):
+        entry = series_id[i]
+        if not run_as_widget:
+            utility.progress_window(loading_progress, (count + 1) * 100 / len(series_id), '...')
+        match_id = re.compile('data-movieid="(.*?)"', re.DOTALL).findall(entry)
+        if match_id:
+            video_id = match_id[0]
+        match = re.compile('class="col date nowrap">(.+?)<', re.DOTALL).findall(entry)
+        date = match[0]
+        match_title1 = re.compile('class="seriestitle">(.+?)</a>', re.DOTALL).findall(entry)
+        match_title2 = re.compile('class="col title">.+?>(.+?)<', re.DOTALL).findall(entry)
+        if match_title1:
+            title = utility.unescape(match_title1[0]).replace('</span>', '')
+        elif match_title2:
+            title = match_title2[0]
+        else:
+            title = ''
+        title = date + ' - ' + title
+        if video_id not in video_ids:
+            video_ids.append(video_id)
+            # due to limitations in the netflix api, there is no way to get the series_id of an
+            # episode, so the 4 param is set to True to treat tv episodes the same as movies.
+            added = video(video_id, title, '', True, False, video_type, '')
+            if added:
+                count += 1
+            if count == 20:
+                break
+    if utility.get_setting('force_view') and not run_as_widget:
+        xbmc.executebuiltin('Container.SetViewMode(' + utility.get_setting('view_id_activity') + ')')
+    xbmcplugin.endOfDirectory(plugin_handle)
+
+
+def search(search_string, video_type, run_as_widget=False):
+    i = 1
+    loading_progress = None
+    if not run_as_widget:
+        loading_progress = xbmcgui.DialogProgress()
+        loading_progress.create('Netflix', utility.get_string(30205) + '...')
+        utility.progress_window(loading_progress, 0, '...')
+    xbmcplugin.setContent(plugin_handle, 'movies')
+    post_data = '{"paths":[["search","%s",{"from":0,"to":48},["summary","title"]],["search","%s",["id","length",' \
+                '"name","trackIds","requestId"]]],"authURL":"%s"}' % (search_string, search_string,
+                                                                      utility.get_setting('authorization_url'))
+    content = utility.decode(connect.load_site(
+        utility.evaluator_url % (utility.get_setting('netflix_application'), utility.get_setting('netflix_version')),
+        post=post_data))
+    try:
+        matches = json.loads(content)['value']['videos']
+        for k in matches:
+            if not run_as_widget:
+                utility.progress_window(loading_progress, i * 100 / len(matches), '...')
+            video(unicode(matches[k]['summary']['id']), '', '', False, False, video_type, '')
+            i += 1
+        if utility.get_setting('force_view') and not run_as_widget:
+            xbmc.executebuiltin('Container.SetViewMode(' + utility.get_setting('view_id_videos') + ')')
+        xbmcplugin.endOfDirectory(plugin_handle)
+    except Exception:
+        import traceback
+        print str(traceback.print_exc())
+        utility.notification(utility.get_string(30306))
+        pass

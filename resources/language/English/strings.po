@@ -136,6 +136,10 @@ msgctxt "#30110"
 msgid "Next page"
 msgstr ""
 
+msgctxt "#30111"
+msgid "Search"
+msgstr ""
+
 msgctxt "#30150"
 msgid "Add to library"
 msgstr ""
@@ -214,4 +218,8 @@ msgstr ""
 
 msgctxt "#30305"
 msgid "No trailer available!"
+msgstr ""
+
+msgctxt "#30306"
+msgid "No results found!"
 msgstr ""

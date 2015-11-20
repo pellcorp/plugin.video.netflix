@@ -1,4 +1,3 @@
-#!/usr/bin/python
 from __future__ import unicode_literals
 
 import re
@@ -11,8 +10,7 @@ import utility
 
 def load():
     if utility.get_setting('selected_profile'):
-        connect.load_site(utility.profile_switch_url + utility.get_setting('selected_profile') +
-                          utility.get_setting('authorization_ur'))
+        connect.load_site(utility.profile_switch_url + utility.get_setting('selected_profile'))
         connect.save_session()
     else:
         utility.log('Load profile: no stored profile found!', loglevel=xbmc.LOGERROR)
@@ -45,7 +43,7 @@ def choose():
 
 def force_choose():
     utility.set_setting('single_profile', 'false')
-    utility.show_notification(utility.get_string(30304))
+    utility.notification(utility.get_string(30304))
     choose()
 
 

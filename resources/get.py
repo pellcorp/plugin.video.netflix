@@ -1,4 +1,3 @@
-#!/usr/bin/python
 from __future__ import unicode_literals
 
 import base64
@@ -62,6 +61,6 @@ def trailer(video_type, title):
         tmdb_id = content['id']
         content = search.trailer(video_type, tmdb_id)
     else:
-        utility.show_notification(utility.get_string(30305))
+        utility.notification(utility.get_string(30305))
         content = None
     return content

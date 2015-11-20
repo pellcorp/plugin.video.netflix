@@ -1,4 +1,3 @@
-#!/usr/bin/python
 from __future__ import unicode_literals
 
 import xbmc
@@ -11,7 +10,7 @@ import utility
 def trailer(title, video_type):
     trailers = []
     content = get.trailer(video_type, title)
-    try:
+    if content:
         for match in content['results']:
             if match['site'] == 'YouTube':
                 if match['iso_639_1']:
@@ -28,6 +27,7 @@ def trailer(title, video_type):
                 match = 'PlayMedia(plugin://plugin.video.youtube/play/?video_id=%s)' % selected_trailer['key']
                 xbmc.executebuiltin(match)
         else:
-            utility.show_notification(utility.get_string(30305))
-    except Exception:
+            utility.notification(utility.get_string(30305))
+    else:
+        utility.notification(utility.get_string(30305))
         pass

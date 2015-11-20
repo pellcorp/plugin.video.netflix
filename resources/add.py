@@ -1,4 +1,3 @@
-#!/usr/bin/python
 from __future__ import unicode_literals
 
 import sys
@@ -37,7 +36,7 @@ def directory(name, url, mode, thumb, type='', context_enable=True):
 
 
 def video_directory(name, url, mode, thumb, video_type='', description='', duration='', year='', mpaa='', director='',
-                    genre='', rating='', remove=False):
+                    genre='', rating=0.0, remove=False):
     entries = []
     if duration:
         duration = str(int(duration) * 60)
@@ -55,11 +54,13 @@ def video_directory(name, url, mode, thumb, video_type='', description='', durat
     list_item.setArt({'icon': 'DefaultTVShows.png', 'thumb': thumb})
     list_item.setInfo(type='video',
                       infoLabels={'title': name, 'plot': description, 'duration': duration, 'year': int(year),
-                                  'mpaa': mpaa, 'director': director, 'genre': genre, 'rating': float(rating)})
+                                  'mpaa': mpaa, 'director': director, 'genre': genre, 'rating': rating})
     if xbmcvfs.exists(fanart_file):
         list_item.setProperty('fanart_image', fanart_file)
     elif xbmcvfs.exists(cover_file):
         list_item.setProperty('fanart_image', cover_file)
+    else:
+        list_item.setProperty('fanart_image', utility.addon_fanart())
     if video_type == 'tvshow':
         if utility.get_setting('browse_tv_shows') == 'true':
             entries.append((utility.get_string(30151),

@@ -136,6 +136,10 @@ msgctxt "#30110"
 msgid "Next page"
 msgstr "Nächste Seite"
 
+msgctxt "#30111"
+msgid "Search"
+msgstr ""
+
 msgctxt "#30150"
 msgid "Add to library"
 msgstr "Zur Bibliothek hinzufügen"
@@ -215,3 +219,7 @@ msgstr "Verschiedene Profile gefunden. Wählen Sie Ihr Profil!"
 msgctxt "#30305"
 msgid "No trailer available!"
 msgstr "Kein Trailer verfügbar!"
+
+msgctxt "#30306"
+msgid "No results found!"
+msgstr "Keine Ergebnisse gefunden!"

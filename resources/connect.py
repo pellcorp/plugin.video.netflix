@@ -1,4 +1,3 @@
-#!/usr/bin/python
 from __future__ import unicode_literals
 
 import pickle
@@ -10,6 +9,16 @@ import resources.lib.certifi as certifi
 import utility
 
 session = None
+
+'''
+temporary solution to surpress warnings
+have to be fixed later to get ssl verification working
+'''
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+from requests.packages.urllib3.exceptions import InsecurePlatformWarning
+
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+requests.packages.urllib3.disable_warnings(InsecurePlatformWarning)
 
 
 def new_session():
@@ -43,11 +52,11 @@ def delete_cookies_session():
     if xbmcvfs.exists(utility.cookie_file()):
         xbmcvfs.delete(utility.cookie_file())
         utility.log('Cookie file deleted.')
-        utility.show_notification(utility.get_string(30301))
+        utility.notification(utility.get_string(30301))
     if xbmcvfs.exists(utility.session_file()):
         xbmcvfs.delete(utility.session_file())
         utility.log('Session file deleted.')
-        utility.show_notification(utility.get_string(30302))
+        utility.notification(utility.get_string(30302))
 
 
 def load_site(url, post=None):
@@ -59,7 +68,7 @@ def load_site(url, post=None):
             response = session.get(url, verify=True)
     except AttributeError:
         utility.log('Session is missing', loglevel=xbmc.LOGERROR)
-        utility.show_notification(utility.get_string(30301))
+        utility.notification(utility.get_string(30301))
         new_session()
         save_session()
         if post:

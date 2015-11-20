@@ -1,4 +1,3 @@
-#!/usr/bin/python
 from __future__ import unicode_literals
 
 import HTMLParser
@@ -11,8 +10,8 @@ addon_id = 'plugin.video.netflix'
 addon_handle = xbmcaddon.Addon(addon_id)
 main_url = 'https://www.netflix.com'
 kids_url = 'https://www.netflix.com/Kids'
-genres_url = 'https://www.netflix.com/api/%s/%s/pathEvaluator?materialize=true&model=harris'
-profile_switch_url = 'https://api-global.netflix.com/desktop/account/profiles/switch?switchProfileGuid='
+evaluator_url = 'http://www.netflix.com/api/%s/%s/pathEvaluator?materialize=true&model=harris'
+profile_switch_url = 'http://api-global.netflix.com/desktop/account/profiles/switch?switchProfileGuid='
 profile_url = 'https://www.netflix.com/ProfilesGate?nextpage=http%3A%2F%2Fwww.netflix.com%2FDefault'
 picture_url = 'https://image.tmdb.org/t/p/original'
 tmdb_url = 'https://api.themoviedb.org/3/search/%s?api_key=%s&query=%s&language=de'
@@ -58,7 +57,7 @@ def log(message, loglevel=xbmc.LOGNOTICE):
     xbmc.log(encode(addon_id + ': ' + message), level=loglevel)
 
 
-def show_notification(message):
+def notification(message):
     xbmc.executebuiltin(encode('Notification(Netflix: , %s, 5000, %s)' % (message, addon_icon())))
 
 
@@ -134,9 +133,19 @@ def get_parameter(parameters, parameter):
     return urllib.unquote_plus(parameters.get(parameter, ''))
 
 
-def display_progress_window(progress_window, value, message):
-    progress_window.update(value, '', message, '')
-    if progress_window.iscanceled():
+def progress_window(window_handle, value, message):
+    window_handle.update(value, '', message, '')
+    if window_handle.iscanceled():
         return False
     else:
         return True
+
+
+def keyboard():
+    keyboard_handle = xbmc.Keyboard('', get_string(30111))
+    keyboard_handle.doModal()
+    if keyboard_handle.isConfirmed() and keyboard_handle.getText():
+        search_string = urllib.quote_plus(keyboard_handle.getText())
+    else:
+        search_string = None
+    return search_string
