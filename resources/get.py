@@ -33,16 +33,13 @@ def series_info(series_id):
         content = file_handler.read()
         file_handler.close()
     if not content:
-        url = utility.series_url % (utility.get_setting('language'), series_id, utility.get_setting('country'))
+        url = utility.series_url % (utility.get_setting('netflix_application'), utility.get_setting('netflix_version'),
+                                    series_id)
         content = connect.load_site(url)
         file_handler = xbmcvfs.File(cache_file, 'wb')
         file_handler.write(content)
         file_handler.close()
-    # if netflix throws exception they may still return content after the exception
-    index = content.find('{"title":')
-    if index != -1:
-        content = content[index:]
-    return utility.clean_content(utility.decode(content))
+    return utility.decode(content)
 
 
 def cover(video_type, video_id, title, year):

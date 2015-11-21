@@ -16,8 +16,7 @@ evaluator_url = 'http://www.netflix.com/api/%s/%s/pathEvaluator?materialize=true
 profile_switch_url = 'http://api-global.netflix.com/desktop/account/profiles/switch?switchProfileGuid='
 profile_url = 'https://www.netflix.com/ProfilesGate?nextpage=http%3A%2F%2Fwww.netflix.com%2FDefault'
 picture_url = 'https://image.tmdb.org/t/p/original'
-series_url = "http://api-global.netflix.com/desktop/odp/episodes?languages=%s&forceEpisodes=true&routing=redirect&" \
-             "video=%s&country=%s"
+series_url = 'http://www.netflix.com/api/%s/%s/metadata?movieid=%s&imageFormat=jpg'
 tmdb_url = 'https://api.themoviedb.org/3/search/%s?api_key=%s&query=%s&language=de'
 
 

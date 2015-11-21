@@ -289,40 +289,39 @@ def search(search_string, video_type, run_as_widget=False):
 def seasons(series_name, series_id, thumb):
     seasons = []
     content = get.series_info(series_id)
-    content = json.loads(content)
-    for item in content['episodes']:
-        if item[0]['season'] not in seasons:
-            seasons.append(item[0]['season'])
+    content = json.loads(content)['video']['seasons']
+    for item in content:
+        seasons.append((item['title'], item['seq']))
     for season in seasons:
-        add.season('Season ' + season, season, 'list_episodes', thumb, series_name, series_id)
+        add.season(season[0], season[1], 'list_episodes', thumb, series_name, series_id)
     xbmcplugin.endOfDirectory(plugin_handle)
 
 
 def episodes(series_id, season):
     xbmcplugin.setContent(plugin_handle, 'episodes')
     content = get.series_info(series_id)
-    content = json.loads(content)
-    for test in content['episodes']:
-        for item in test:
-            episode_season = unicode(item['season'])
-            if episode_season == season:
+    content = json.loads(content)['video']['seasons']
+    for test in content:
+        episode_season = unicode(test['seq'])
+        if episode_season == season:
+            for item in test['episodes']:
                 episode_id = item['episodeId']
-                episode_nr = item['episode']
-                episode_title = (episode_nr + '.  ' + item['title'])
+                episode_nr = item['seq']
+                episode_title = (unicode(episode_nr) + '. ' + item['title'])
                 duration = item['runtime']
-                bookmark_position = item['bookmarkPosition']
+                offset = item['bookmark']['offset']
                 playcount = 0
-                if (duration > 0 and float(bookmark_position) / float(duration)) >= 0.9:
+                if (duration > 0 and float(offset) / float(duration)) >= 0.9:
                     playcount = 1
                 description = item['synopsis']
                 try:
                     thumb = item['stills'][0]['url']
                 except:
-                    thumb = ''
-                add.episode(episode_title, episode_id, 'play_video_main', thumb, description, unicode(duration), season,
+                    thumb = utility.addon_fanart()
+                add.episode(episode_title, episode_id, 'play_video_main', thumb, description, duration, season,
                             episode_nr, series_id, playcount)
     if utility.get_setting('force_view'):
-        xbmc.executebuiltin('Container.SetViewMode(' + view_id_episodes + ')')
+        xbmc.executebuiltin('Container.SetViewMode(' + utility.get_setting('view_id_episodes') + ')')
     xbmcplugin.endOfDirectory(plugin_handle)
 
 

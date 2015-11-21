@@ -104,7 +104,7 @@ def season(name, url, mode, thumb, series_name, series_id):
     cover_file = xbmc.translatePath(utility.cover_cache_dir() + filename)
     fanart_file = xbmc.translatePath(utility.fanart_cache_dir() + filename)
     u = sys.argv[0]
-    u += '?url=' + urllib.quote_plus(url)
+    u += '?url=' + urllib.quote_plus(unicode(url))
     u += '&mode=' + mode
     u += '&series_id=' + urllib.quote_plus(series_id)
     list_item = xbmcgui.ListItem(name)
@@ -117,8 +117,8 @@ def season(name, url, mode, thumb, series_name, series_id):
     else:
         list_item.setProperty('fanart_image', utility.addon_fanart())
     entries.append((utility.get_string(30150),
-                    'RunPlugin(plugin://%s/?mode=addSeriesToLibrary&url=%s&name=%s&seriesID=%s)' % (
-                        utility.addon_id, urllib.quote_plus(url),
+                    'RunPlugin(plugin://%s/?mode=add_series_to_library&url=%s&name=%s&seriesID=%s)' % (
+                        utility.addon_id, urllib.quote_plus(unicode(url)),
                         urllib.quote_plus(utility.encode(series_name.strip())),
                         series_id)))
     list_item.addContextMenuItems(entries)
@@ -134,7 +134,7 @@ def episode(name, url, mode, thumb, description='', duration='', season_nr='', e
     cover_file = xbmc.translatePath(utility.cover_cache_dir() + filename)
     fanart_file = xbmc.translatePath(utility.fanart_cache_dir() + filename)
     u = sys.argv[0]
-    u += '?url=' + urllib.quote_plus(url)
+    u += '?url=' + urllib.quote_plus(unicode(url))
     u += '&mode=' + mode
     u += '&series_id=' + urllib.quote_plus(series_id)
     list_item = xbmcgui.ListItem(name)
