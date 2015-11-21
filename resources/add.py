@@ -35,11 +35,11 @@ def directory(name, url, mode, thumb, type='', context_enable=True):
     return directory_item
 
 
-def video_directory(name, url, mode, thumb, video_type='', description='', duration='', year='', mpaa='', director='',
-                    genre='', rating=0.0, remove=False):
+def video(name, url, mode, thumb, video_type='', description='', duration='', year='', mpaa='', director='', genre='',
+          rating=0.0, remove=False):
     entries = []
     if duration:
-        duration = str(int(duration) * 60)
+        duration = unicode(int(duration) * 60)
     filename = utility.clean_filename(url) + '.jpg'
     cover_file = xbmc.translatePath(utility.cover_cache_dir() + filename)
     fanart_file = xbmc.translatePath(utility.fanart_cache_dir() + filename)
@@ -94,5 +94,59 @@ def video_directory(name, url, mode, thumb, video_type='', description='', durat
                             utility.addon_id, urllib.quote_plus(url),
                             urllib.quote_plus(utility.encode(name.strip())) + ' (' + year + ')')))
     list_item.addContextMenuItems(entries)
+    directory_item = xbmcplugin.addDirectoryItem(handle=plugin_handle, url=u, listitem=list_item, isFolder=True)
+    return directory_item
+
+
+def season(name, url, mode, thumb, series_name, series_id):
+    entries = []
+    filename = utility.clean_filename(series_id) + '.jpg'
+    cover_file = xbmc.translatePath(utility.cover_cache_dir() + filename)
+    fanart_file = xbmc.translatePath(utility.fanart_cache_dir() + filename)
+    u = sys.argv[0]
+    u += '?url=' + urllib.quote_plus(url)
+    u += '&mode=' + mode
+    u += '&series_id=' + urllib.quote_plus(series_id)
+    list_item = xbmcgui.ListItem(name)
+    list_item.setArt({'icon': 'DefaultTVShows.png', 'thumb': thumb})
+    list_item.setInfo(type='video', infoLabels={'title': name})
+    if xbmcvfs.exists(fanart_file):
+        list_item.setProperty('fanart_image', fanart_file)
+    elif xbmcvfs.exists(cover_file):
+        list_item.setProperty('fanart_image', cover_file)
+    else:
+        list_item.setProperty('fanart_image', utility.addon_fanart())
+    entries.append((utility.get_string(30150),
+                    'RunPlugin(plugin://%s/?mode=addSeriesToLibrary&url=%s&name=%s&seriesID=%s)' % (
+                        utility.addon_id, urllib.quote_plus(url),
+                        urllib.quote_plus(utility.encode(series_name.strip())),
+                        series_id)))
+    list_item.addContextMenuItems(entries)
+    directory_item = xbmcplugin.addDirectoryItem(handle=plugin_handle, url=u, listitem=list_item, isFolder=True)
+    return directory_item
+
+
+def episode(name, url, mode, thumb, description='', duration='', season_nr='', episode_nr='', series_id='',
+            playcount=''):
+    if duration:
+        duration = unicode(int(duration) * 60)
+    filename = utility.clean_filename(series_id) + '.jpg'
+    cover_file = xbmc.translatePath(utility.cover_cache_dir() + filename)
+    fanart_file = xbmc.translatePath(utility.fanart_cache_dir() + filename)
+    u = sys.argv[0]
+    u += '?url=' + urllib.quote_plus(url)
+    u += '&mode=' + mode
+    u += '&series_id=' + urllib.quote_plus(series_id)
+    list_item = xbmcgui.ListItem(name)
+    list_item.setArt({'icon': 'DefaultTVShows.png', 'thumb': thumb})
+    list_item.setInfo(type='video',
+                      infoLabels={'title': name, 'plot': description, 'duration': duration, 'season': season_nr,
+                                  'episode': episode_nr, 'playcount': playcount})
+    if xbmcvfs.exists(fanart_file):
+        list_item.setProperty('fanart_image', fanart_file)
+    elif xbmcvfs.exists(cover_file):
+        list_item.setProperty('fanart_image', cover_file)
+    else:
+        list_item.setProperty('fanart_image', utility.addon_fanart())
     directory_item = xbmcplugin.addDirectoryItem(handle=plugin_handle, url=u, listitem=list_item, isFolder=True)
     return directory_item

@@ -48,17 +48,6 @@ def save_session():
     xbmcvfs.rename(temp_file, utility.session_file())
 
 
-def delete_cookies_session():
-    if xbmcvfs.exists(utility.cookie_file()):
-        xbmcvfs.delete(utility.cookie_file())
-        utility.log('Cookie file deleted.')
-        utility.notification(utility.get_string(30301))
-    if xbmcvfs.exists(utility.session_file()):
-        xbmcvfs.delete(utility.session_file())
-        utility.log('Session file deleted.')
-        utility.notification(utility.get_string(30302))
-
-
 def load_site(url, post=None):
     utility.log('Loading url: ' + url)
     try:

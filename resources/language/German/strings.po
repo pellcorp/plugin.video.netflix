@@ -29,14 +29,18 @@ msgid "Password"
 msgstr "Passwort"
 
 msgctxt "#30003"
+msgid "Update library after adding"
+msgstr "Bibliothek aktualisieren nach Hinzufügen"
+
+msgctxt "#30004"
 msgid "Profil settings"
 msgstr "Profil Einstellungen"
 
-msgctxt "#30004"
+msgctxt "#30005"
 msgid "Single-user account"
 msgstr "Einzel-Profil Konto"
 
-msgctxt "#30005"
+msgctxt "#30006"
 msgid "Show profile selection on each start"
 msgstr "Profilauswahl bei jedem Start anzeigen"
 
@@ -49,14 +53,18 @@ msgid "Debug logging"
 msgstr "Debug Protokollierung"
 
 msgctxt "#30012"
+msgid "Library path"
+msgstr "Datenbank Verzeichnis"
+
+msgctxt "#30013"
 msgid "SSL settings"
 msgstr "SSL Einstellungen"
 
-msgctxt "#30013"
+msgctxt "#30014"
 msgid "Use advanced SSL"
 msgstr "Benutze erweitertes SSL"
 
-msgctxt "#30014"
+msgctxt "#30015"
 msgid "SSL version"
 msgstr "SSL Version"
 
@@ -89,8 +97,24 @@ msgid "View ID - episodes"
 msgstr "View ID - Episoden"
 
 msgctxt "#30027"
-msgid "View ID - viewing activity)"
+msgid "View ID - viewing activity"
 msgstr "View ID - Kürzlich angesehen"
+
+msgctxt "#30030"
+msgid "User data"
+msgstr "Benutzerdaten"
+
+msgctxt "#30031"
+msgid "Delete cache"
+msgstr "Cache löschen"
+
+msgctxt "#30032"
+msgid "Delete cookies / session"
+msgstr "Cookies / Sitzung löschen"
+
+msgctxt "#30033"
+msgid "Reset Addon"
+msgstr "Addon zurücksetzen"
 
 msgctxt "#30100"
 msgid "Movies"
@@ -223,3 +247,15 @@ msgstr "Kein Trailer verfügbar!"
 msgctxt "#30306"
 msgid "No results found!"
 msgstr "Keine Ergebnisse gefunden!"
+
+msgctxt "#30307"
+msgid "Really reset the addon?"
+msgstr "Addon wirklich zurücksetzen?"
+
+msgctxt "#30308"
+msgid "Addon has been reset!"
+msgstr "Addon wurde zurückgesetzt!"
+
+msgctxt "#30309"
+msgid "Cache has been deleted!"
+msgstr "Cache wurde geleert!"

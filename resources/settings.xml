@@ -2,16 +2,19 @@
     <category label="30000">
         <setting id="username" type="text" label="30001" default=""/>
         <setting id="password" type="text" option="hidden" label="30002" default=""/>
-        <setting label="30003" type="lsep"/>
-        <setting id="single_profile" type="bool" label="30004" default="false"/>
-        <setting id="show_profiles" type="bool" label="30005" enable="eq(-1,false)" default="true"/>
+        <setting label="30000" type="lsep"/>
+        <setting id="update_db" type="bool" label="30003" default="true"/>
+        <setting label="30004" type="lsep"/>
+        <setting id="single_profile" type="bool" label="30005" default="false"/>
+        <setting id="show_profiles" type="bool" label="30006" enable="eq(-1,false)" default="true"/>
     </category>
     <category label="30010">
         <setting label="30000" type="lsep"/>
         <setting id="debug" type="bool" label="30011" default="true"/>
-        <setting label="30012" type="lsep"/>
-        <setting id="ssl_enabled" type="bool" label="30013" default="true"/>
-        <setting id="ssl_version" type="labelenum" label="30014" values="Auto|SSLv2|SSLv3|SSLv23|TLSv1"
+        <setting id="library_path" type="folder" label="30012" default="special://profile/addon_data/plugin.video.netflix/library"/>
+        <setting label="30013" type="lsep"/>
+        <setting id="ssl_enabled" type="bool" label="30014" default="true"/>
+        <setting id="ssl_version" type="labelenum" label="30015" values="Auto|SSLv2|SSLv3|SSLv23|TLSv1"
                  default="SSLv23"/>
     </category>
     <category label="30020">
@@ -21,7 +24,13 @@
         <setting label="30023" type="lsep"/>
         <setting id="force_view" type="bool" label="30024" default="true"/>
         <setting id="view_id_videos" type="number" label="30025" enable="eq(-1,true)" default="501"/>
-        <setting id="view_id_episodes_new" type="number" label="30026" enable="eq(-2,true)" default="503"/>
+        <setting id="view_id_episodes" type="number" label="30026" enable="eq(-2,true)" default="503"/>
         <setting id="view_id_activity" type="number" label="30027" enable="eq(-3,true)" default="51"/>
+    </category>
+    <category label="30030">
+        <setting label="30000" type="lsep"/>
+        <setting label="30031" type="action" action="RunPlugin(plugin://plugin.video.netflix/?mode=delete_cache)"/>
+        <setting label="30032" type="action" action="RunPlugin(plugin://plugin.video.netflix/?mode=delete_cookies)"/>
+        <setting label="30033" type="action" action="RunPlugin(plugin://plugin.video.netflix/?mode=reset_addon)"/>
     </category>
 </settings>

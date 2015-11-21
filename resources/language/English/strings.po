@@ -29,14 +29,18 @@ msgid "Password"
 msgstr ""
 
 msgctxt "#30003"
-msgid "Profil settings"
+msgid "Update library after adding"
 msgstr ""
 
 msgctxt "#30004"
-msgid "Single-user account"
+msgid "Profil settings"
 msgstr ""
 
 msgctxt "#30005"
+msgid "Single-user account"
+msgstr ""
+
+msgctxt "#30006"
 msgid "Show profile selection on each start"
 msgstr ""
 
@@ -49,14 +53,18 @@ msgid "Debug logging"
 msgstr ""
 
 msgctxt "#30012"
-msgid "SSL settings"
+msgid "Library path"
 msgstr ""
 
 msgctxt "#30013"
-msgid "Use advanced SSL"
+msgid "SSL settings"
 msgstr ""
 
 msgctxt "#30014"
+msgid "Use advanced SSL"
+msgstr ""
+
+msgctxt "#30015"
 msgid "SSL version"
 msgstr ""
 
@@ -89,7 +97,23 @@ msgid "View ID - episodes"
 msgstr ""
 
 msgctxt "#30027"
-msgid "View ID - viewing activity)"
+msgid "View ID - viewing activity"
+msgstr ""
+
+msgctxt "#30030"
+msgid "User data"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Delete cache"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Delete cookies / session"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Reset Addon"
 msgstr ""
 
 msgctxt "#30100"
@@ -222,4 +246,16 @@ msgstr ""
 
 msgctxt "#30306"
 msgid "No results found!"
+msgstr ""
+
+msgctxt "#30307"
+msgid "Really reset the addon?"
+msgstr ""
+
+msgctxt "#30308"
+msgid "Addon has been reset!"
+msgstr ""
+
+msgctxt "#30309"
+msgid "Cache has been deleted!"
 msgstr ""

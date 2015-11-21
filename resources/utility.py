@@ -1,12 +1,14 @@
 from __future__ import unicode_literals
 
 import HTMLParser
+import os
 import urllib
 import xbmc
 import xbmcaddon
 import xbmcvfs
 
 addon_id = 'plugin.video.netflix'
+addon_name = 'Netflix'
 addon_handle = xbmcaddon.Addon(addon_id)
 main_url = 'https://www.netflix.com'
 kids_url = 'https://www.netflix.com/Kids'
@@ -14,6 +16,8 @@ evaluator_url = 'http://www.netflix.com/api/%s/%s/pathEvaluator?materialize=true
 profile_switch_url = 'http://api-global.netflix.com/desktop/account/profiles/switch?switchProfileGuid='
 profile_url = 'https://www.netflix.com/ProfilesGate?nextpage=http%3A%2F%2Fwww.netflix.com%2FDefault'
 picture_url = 'https://image.tmdb.org/t/p/original'
+series_url = "http://api-global.netflix.com/desktop/odp/episodes?languages=%s&forceEpisodes=true&routing=redirect&" \
+             "video=%s&country=%s"
 tmdb_url = 'https://api.themoviedb.org/3/search/%s?api_key=%s&query=%s&language=de'
 
 
@@ -41,6 +45,18 @@ def cookie_file():
     return xbmc.translatePath('special://profile/addon_data/' + addon_id + '/cookie')
 
 
+def library_dir():
+    return get_setting('library_path')
+
+
+def movie_dir():
+    return xbmc.translatePath(library_dir() + '/movies/')
+
+
+def tv_dir():
+    return xbmc.translatePath(library_dir() + '/tv/')
+
+
 def addon_dir():
     return addon_handle.getAddonInfo('path')
 
@@ -53,12 +69,16 @@ def addon_fanart():
     return addon_handle.getAddonInfo('fanart')
 
 
+def create_pathname(path, item):
+    return os.path.join(path, item)
+
+
 def log(message, loglevel=xbmc.LOGNOTICE):
     xbmc.log(encode(addon_id + ': ' + message), level=loglevel)
 
 
 def notification(message):
-    xbmc.executebuiltin(encode('Notification(Netflix: , %s, 5000, %s)' % (message, addon_icon())))
+    xbmc.executebuiltin(encode('Notification(%s: , %s, 5000, %s)' % (addon_name, message, addon_icon())))
 
 
 def open_setting():
@@ -116,6 +136,12 @@ def prepare_folders():
         xbmcvfs.mkdir(cover_cache_dir())
     if not xbmcvfs.exists(fanart_cache_dir()):
         xbmcvfs.mkdir(fanart_cache_dir())
+    if not os.path.isdir(library_dir()):
+        xbmcvfs.mkdir(library_dir())
+    if not os.path.isdir(movie_dir()):
+        xbmcvfs.mkdir(movie_dir())
+    if not os.path.isdir(tv_dir()):
+        xbmcvfs.mkdir(tv_dir())
 
 
 def parameters_to_dictionary(parameters):

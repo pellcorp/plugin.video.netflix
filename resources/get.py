@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import base64
+import time
 import xbmc
 import xbmcvfs
 
@@ -21,6 +22,26 @@ def video_info(video_id):
         file_handler = xbmcvfs.File(cache_file, 'wb')
         file_handler.write(content)
         file_handler.close()
+    return utility.clean_content(utility.decode(content))
+
+
+def series_info(series_id):
+    content = ''
+    cache_file = xbmc.translatePath(utility.cache_dir() + series_id + '_episodes.cache')
+    if xbmcvfs.exists(cache_file) and (time.time() - xbmcvfs.Stat(cache_file).st_mtime() < 60 * 5):
+        file_handler = xbmcvfs.File(cache_file, 'rb')
+        content = file_handler.read()
+        file_handler.close()
+    if not content:
+        url = utility.series_url % (utility.get_setting('language'), series_id, utility.get_setting('country'))
+        content = connect.load_site(url)
+        file_handler = xbmcvfs.File(cache_file, 'wb')
+        file_handler.write(content)
+        file_handler.close()
+    # if netflix throws exception they may still return content after the exception
+    index = content.find('{"title":')
+    if index != -1:
+        content = content[index:]
     return utility.clean_content(utility.decode(content))
 
 

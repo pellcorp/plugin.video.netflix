@@ -11,7 +11,9 @@ import xbmcvfs
 
 import add
 import connect
+import delete
 import get
+import login
 import profiles
 import utility
 
@@ -25,6 +27,8 @@ def videos(url, video_type, run_as_widget=False):
         loading_progress.create('Netflix', utility.get_string(30205) + '...')
         utility.progress_window(loading_progress, 0, '...')
     xbmcplugin.setContent(plugin_handle, 'movies')
+    if not xbmcvfs.exists(utility.session_file()):
+        login.login()
     content = utility.decode(connect.load_site(url))
     if not 'id="page-LOGIN"' in content:
         if utility.get_setting('single_profile') == 'true' and 'id="page-ProfilesGate"' in content:
@@ -82,7 +86,7 @@ def videos(url, video_type, run_as_widget=False):
                 xbmc.executebuiltin('Container.SetViewMode(' + utility.get_setting('view_id_videos') + ')')
         xbmcplugin.endOfDirectory(plugin_handle)
     else:
-        connect.delete_cookies_session()
+        delete.cookies()
         utility.log('User is not logged in.', loglevel=xbmc.LOGERROR)
         utility.notification(utility.get_string(30303))
 
@@ -159,14 +163,14 @@ def video(video_id, title, thumb_url, is_episode, hide_movies, video_type, url):
     if utility.get_setting('browse_tv_shows') == 'true' and type == 'tvshow':
         next_mode = 'list_seasons'
     if '/my-list' in url and video_type_temp == video_type:
-        add.video_directory(title, video_id, next_mode, thumb_url, type, description, duration, year, mpaa,
-                            director, genre, rating, remove=True)
+        add.video(title, video_id, next_mode, thumb_url, type, description, duration, year, mpaa,
+                  director, genre, rating, remove=True)
         added = True
     elif type == 'movie' and hide_movies:
         pass
     elif video_type_temp == video_type or video_type == 'both':
-        add.video_directory(title, video_id, next_mode, thumb_url, type, description, duration, year, mpaa,
-                            director, genre, rating)
+        add.video(title, video_id, next_mode, thumb_url, type, description, duration, year, mpaa,
+                  director, genre, rating)
         added = True
     return added
 
@@ -175,6 +179,8 @@ def genres(video_type):
     post_data = ''
     match = []
     xbmcplugin.addSortMethod(plugin_handle, xbmcplugin.SORT_METHOD_LABEL)
+    if not xbmcvfs.exists(utility.session_file()):
+        login.login()
     if video_type == 'tv':
         post_data = '{"paths":[["genres",83,"subgenres",{"from":0,"to":20},"summary"],["genres",83,"subgenres",' \
                     '"summary"]],"authURL":"%s"}' % utility.get_setting('authorization_url')
@@ -213,6 +219,8 @@ def view_activity(video_type, run_as_widget=False):
         loading_progress.create('Netflix', utility.get_string(30205) + '...')
         utility.progress_window(loading_progress, 0, '...')
     xbmcplugin.setContent(plugin_handle, 'movies')
+    if not xbmcvfs.exists(utility.session_file()):
+        login.login()
     content = utility.decode(connect.load_site(utility.main_url + '/WiViewingActivity'))
     series_id = re.compile('(<li .*?data-series=.*?</li>)', re.DOTALL).findall(content)
     for i in range(1, len(series_id), 1):
@@ -255,6 +263,8 @@ def search(search_string, video_type, run_as_widget=False):
         loading_progress.create('Netflix', utility.get_string(30205) + '...')
         utility.progress_window(loading_progress, 0, '...')
     xbmcplugin.setContent(plugin_handle, 'movies')
+    if not xbmcvfs.exists(utility.session_file()):
+        login.login()
     post_data = '{"paths":[["search","%s",{"from":0,"to":48},["summary","title"]],["search","%s",["id","length",' \
                 '"name","trackIds","requestId"]]],"authURL":"%s"}' % (search_string, search_string,
                                                                       utility.get_setting('authorization_url'))
@@ -272,7 +282,54 @@ def search(search_string, video_type, run_as_widget=False):
             xbmc.executebuiltin('Container.SetViewMode(' + utility.get_setting('view_id_videos') + ')')
         xbmcplugin.endOfDirectory(plugin_handle)
     except Exception:
-        import traceback
-        print str(traceback.print_exc())
         utility.notification(utility.get_string(30306))
         pass
+
+
+def seasons(series_name, series_id, thumb):
+    seasons = []
+    content = get.series_info(series_id)
+    content = json.loads(content)
+    for item in content['episodes']:
+        if item[0]['season'] not in seasons:
+            seasons.append(item[0]['season'])
+    for season in seasons:
+        add.season('Season ' + season, season, 'list_episodes', thumb, series_name, series_id)
+    xbmcplugin.endOfDirectory(plugin_handle)
+
+
+def episodes(series_id, season):
+    xbmcplugin.setContent(plugin_handle, 'episodes')
+    content = get.series_info(series_id)
+    content = json.loads(content)
+    for test in content['episodes']:
+        for item in test:
+            episode_season = unicode(item['season'])
+            if episode_season == season:
+                episode_id = item['episodeId']
+                episode_nr = item['episode']
+                episode_title = (episode_nr + '.  ' + item['title'])
+                duration = item['runtime']
+                bookmark_position = item['bookmarkPosition']
+                playcount = 0
+                if (duration > 0 and float(bookmark_position) / float(duration)) >= 0.9:
+                    playcount = 1
+                description = item['synopsis']
+                try:
+                    thumb = item['stills'][0]['url']
+                except:
+                    thumb = ''
+                add.episode(episode_title, episode_id, 'play_video_main', thumb, description, unicode(duration), season,
+                            episode_nr, series_id, playcount)
+    if utility.get_setting('force_view'):
+        xbmc.executebuiltin('Container.SetViewMode(' + view_id_episodes + ')')
+    xbmcplugin.endOfDirectory(plugin_handle)
+
+
+"""
+alle serien anzeigen
+{"paths":[["genres",83,"su",{"from":0,"to":400},["summary","title"]]],"authURL":"%s"}
+
+jeweiliges movie genre anzeigen
+{"paths":[["genres",<genre_id>,"su",{"from":0,"to":120},["summary","title"]]],"%s"}
+"""
